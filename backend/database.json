@@ -1,0 +1,73 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Pollyana Medeiros",
+      "cpf": "53911458053",
+      "password": "123123"
+    },
+    {
+      "id": 2,
+      "name": "laura",
+      "cpf": "10987654321",
+      "password": "123123"
+    }
+  ],
+  "cards": [
+    {
+      "id": 1,
+      "bankName": "GS3 TEC",
+      "lastDigits": "5621",
+      "availableLimit": 7867.8,
+      "bestPurchaseDay": 20,
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "bankName": "Banco Neon",
+      "lastDigits": "9034",
+      "availableLimit": 5230.5,
+      "bestPurchaseDay": 10,
+      "userId": 1
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "cardId": 1,
+      "date": "2025-09-05T22:35:00Z",
+      "title": "Apple",
+      "amount": 545.99,
+      "installments": "12x"
+    },
+    {
+      "id": 2,
+      "cardId": 1,
+      "date": "2025-09-05T15:25:00Z",
+      "title": "Uber*Uber*Trip",
+      "amount": 12.96
+    },
+    {
+      "id": 3,
+      "cardId": 1,
+      "date": "2025-09-03T09:34:00Z",
+      "title": "Carrefour",
+      "amount": 349.76,
+      "installments": "3x"
+    },
+    {
+      "id": 4,
+      "cardId": 2,
+      "date": "2025-09-06T18:22:00Z",
+      "title": "Netflix",
+      "amount": 55.9
+    },
+    {
+      "id": 5,
+      "cardId": 2,
+      "date": "2025-09-04T13:40:00Z",
+      "title": "Ifood",
+      "amount": 28.5
+    }
+  ]
+}
