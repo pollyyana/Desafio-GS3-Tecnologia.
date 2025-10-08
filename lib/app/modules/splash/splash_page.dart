@@ -21,7 +21,6 @@ class SplashPage extends GetView<SplashController> {
     return Scaffold(
       body: Stack(
         children: [
-          // Fundo
           Container(
             width: Get.width,
             height: Get.height,

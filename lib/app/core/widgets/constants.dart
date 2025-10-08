@@ -12,6 +12,9 @@ class ImageConstants {
   static const acompanhar = 'assets/images/acompanhar.png';
   static const atendimento = 'assets/images/atendimento.png';
   static const perguntas = 'assets/images/pergunta.png';
+  static const icon = 'assets/images/icon.png';
+  static const iconOne = 'assets/images/icon-1.png';
+  static const iconotwo = 'assets/images/icon-2.png';
 }
 
 class ColorsConstants {
@@ -19,4 +22,6 @@ class ColorsConstants {
   static const azulBase = Color(0xFF013972);
   static const azul = Color(0xFF2890CF);
   static const white = Color(0xFFFFFFFF);
+  static const azulGradient = Color(0xFF346CBD);
+  static const icongrey = Color(0x33E5E5E5);
 }
