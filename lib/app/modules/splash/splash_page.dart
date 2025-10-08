@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
 import 'package:gs3_tecnologia/app/modules/login/login_page.dart';
 import 'package:gs3_tecnologia/app/modules/splash/splash_controller.dart';
 
 class SplashPage extends GetView<SplashController> {
   const SplashPage({super.key});
+
+  Widget imagens(String imagePath) {
+    return Image.asset(
+      imagePath,
+      width: 100,
+      height: 87,
+      fit: BoxFit.contain,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +27,7 @@ class SplashPage extends GetView<SplashController> {
             height: Get.height,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/background.png'),
+                image: AssetImage(ImageConstants.backgroudChair),
                 fit: BoxFit.cover,
               ),
             ),
@@ -29,15 +39,16 @@ class SplashPage extends GetView<SplashController> {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/images/logo.png',
+                  ImageConstants.imageLogo,
                   width: 242,
+                  height: 157,
                 ),
                 const SizedBox(height: 8),
               ],
             ),
           ),
           Positioned(
-            top: Get.height * 0.45,
+            top: Get.height * 0.50,
             left: 0,
             right: 0,
             child: Center(
@@ -45,7 +56,7 @@ class SplashPage extends GetView<SplashController> {
                 behavior: HitTestBehavior.translucent,
                 onTap: () => controller.toggleLoginVisibility(),
                 child: Image.asset(
-                  'assets/images/entrar.png',
+                  ImageConstants.entrar,
                   width: 80,
                 ),
               ),
@@ -57,11 +68,18 @@ class SplashPage extends GetView<SplashController> {
             right: 0,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 22),
-              child: Image.asset(
-                'assets/images/frame.png',
-                width: 331,
-                fit: BoxFit.contain,
+              padding: const EdgeInsets.symmetric(horizontal: 19),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  imagens(ImageConstants.solicitar),
+                  const SizedBox(width: 12),
+                  imagens(ImageConstants.acompanhar),
+                  const SizedBox(width: 12),
+                  imagens(ImageConstants.perguntas),
+                  const SizedBox(width: 12),
+                  imagens(ImageConstants.atendimento),
+                ],
               ),
             ),
           ),
