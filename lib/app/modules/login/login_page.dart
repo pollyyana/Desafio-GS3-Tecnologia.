@@ -8,6 +8,7 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(LoginController());
     final formKey = GlobalKey<FormState>();
     final cpfController = TextEditingController();
     final senhaController = TextEditingController();
@@ -72,6 +73,8 @@ class LoginPage extends GetView<LoginController> {
                   validator: Validatorless.multiple([
                     Validatorless.required('Informe o CPF'),
                     Validatorless.cpf('CPF inválido'),
+                    Validatorless.min(11, 'CPF deve ter 11 dígitos'),
+                    Validatorless.max(11, 'CPF deve ter 11 dígitos'),
                   ]),
                 ),
                 const SizedBox(height: 16),
@@ -99,9 +102,8 @@ class LoginPage extends GetView<LoginController> {
                       ),
                     ),
                     validator: Validatorless.multiple([
-                      Validatorless.required('Informe o CPF'),
-                      Validatorless.min(11, 'O CPF deve ter 11 números'),
-                      Validatorless.max(11, 'O CPF deve ter 11 números'),
+                      Validatorless.required('Informe a senha'),
+                      Validatorless.min(6, 'A senha deve ter pelo menos 6 caracteres'),
                     ]),
                   );
                 }),
@@ -111,7 +113,11 @@ class LoginPage extends GetView<LoginController> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () => controller.login(),
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        controller.login();
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey,
                       shape: RoundedRectangleBorder(

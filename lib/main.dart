@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gs3_tecnologia/app/modules/home/home_module.dart';
 import 'package:gs3_tecnologia/app/modules/login/login_module.dart';
 import 'package:gs3_tecnologia/app/modules/splash/splash_module.dart';
 
@@ -16,9 +17,11 @@ class MyApp extends StatelessWidget {
       title: 'GS3 Tecnologia',
       theme: ThemeData(),
       debugShowCheckedModeBanner: false,
+      initialRoute: '/home',
       getPages: [
         ...SplashModule().routers,
         ...LoginModule().routers,
+        ...HomeModule().routers,
       ],
     );
   }
