@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
 import 'package:gs3_tecnologia/app/modules/login/login_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -8,11 +9,26 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(LoginController());
     final formKey = GlobalKey<FormState>();
     final cpfController = TextEditingController();
     final senhaController = TextEditingController();
     final obscurePassword = true.obs;
+    final isFormValid = false.obs; //
+
+    void checkFormValidity() {
+      final cpf = cpfController.text.trim();
+      final senha = senhaController.text.trim();
+
+      if (cpf.isNotEmpty && senha.isNotEmpty) {
+        isFormValid.value = true;
+      } else {
+        isFormValid.value = false;
+      }
+    }
+
+    // adiciona listeners
+    cpfController.addListener(checkFormValidity);
+    senhaController.addListener(checkFormValidity);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -62,10 +78,10 @@ class LoginPage extends GetView<LoginController> {
                 // Campo CPF
                 TextFormField(
                   controller: cpfController,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: 'CPF',
-                    hintText: 'CPF',
+                    hintText: '000.000.000-00',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -73,8 +89,6 @@ class LoginPage extends GetView<LoginController> {
                   validator: Validatorless.multiple([
                     Validatorless.required('Informe o CPF'),
                     Validatorless.cpf('CPF inválido'),
-                    Validatorless.min(11, 'CPF deve ter 11 dígitos'),
-                    Validatorless.max(11, 'CPF deve ter 11 dígitos'),
                   ]),
                 ),
                 const SizedBox(height: 16),
@@ -103,37 +117,51 @@ class LoginPage extends GetView<LoginController> {
                     ),
                     validator: Validatorless.multiple([
                       Validatorless.required('Informe a senha'),
-                      Validatorless.min(6, 'A senha deve ter pelo menos 6 caracteres'),
+                      Validatorless.min(
+                        6,
+                        'A senha deve ter pelo menos 6 caracteres',
+                      ),
                     ]),
                   );
                 }),
                 const SizedBox(height: 24),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        controller.login();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                // Botão Confirmar
+                Obx(() {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: isFormValid.value
+                          ? () {
+                              if (formKey.currentState!.validate()) {
+                                controller.login(
+                                  cpf: cpfController.text,
+                                  senha: senhaController.text,
+                                );
+                              }
+                            }
+                          : null, // desativa botão
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isFormValid.value
+                            ? ColorsConstants
+                                  .azulGradient // botão ativo
+                            : Colors.grey, // botão inativo
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
                       ),
-                      elevation: 4,
-                    ),
-                    child: Text(
-                      'Confirmar',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
+                      child: const Text(
+                        'Confirmar',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
           ),

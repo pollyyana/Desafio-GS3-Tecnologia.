@@ -1,99 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
 import 'package:gs3_tecnologia/app/models/cartao_model.dart';
+import 'package:intl/intl.dart';
 
-class CartaoBankWidget extends StatelessWidget {
-  final CartaoModel _cartao;
+class CartaoBankWidget extends StatefulWidget {
+  final CartaoModel cartao;
+  const CartaoBankWidget({super.key, required this.cartao});
 
-  const CartaoBankWidget({
-    super.key,
-    required CartaoModel cartao,
-  }) : _cartao = cartao;
+  @override
+  State<CartaoBankWidget> createState() => _CartaoBankWidgetState();
+}
+
+class _CartaoBankWidgetState extends State<CartaoBankWidget> {
+  bool _mostrarLimite = true;
 
   @override
   Widget build(BuildContext context) {
+    final currency = NumberFormat.simpleCurrency(locale: 'pt_BR');
+
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16),
+      width: 300,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF0D47A1),
-            Color(0xFF1976D2),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 3),
-          ),
-        ],
+        color: widget.cartao.id.isEven
+            ? const Color.fromRGBO(0, 81, 83, 1) // Verde
+            : const Color(0xFF004D99), // Azul
+        borderRadius: BorderRadius.circular(14),
       ),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Linha superior
+          // Parte superior (logo + número + olho)
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              // Logo quadrado
+              Container(
+                width: 88,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Dígitos + nome
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Logo
-                  Container(
-                    width: 40,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.circular(4),
-                      image: _cartao.logo != null
-                          ? DecorationImage(
-                              image: _cartao.logo!,
-                              fit: BoxFit.cover,
-                            )
-                          : null,
+                  const Text(
+                    '•••• 5621',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "•••• ${_cartao.lastDigits}",
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        _cartao.bankName,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.cartao.bankName,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ],
               ),
-              IconButton(
-                onPressed: _cartao.onEyePressed,
-                icon: const Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: Colors.white70,
+              const Spacer(),
+              // Ícone de olho
+              GestureDetector(
+                onTap: () {
+                  setState(() => _mostrarLimite = !_mostrarLimite);
+                },
+                child: Image.asset(
+                  _mostrarLimite ? ImageConstants.eyeOn : ImageConstants.eyeOff,
+                  width: 20,
+                  height: 20,
+                  color: Colors.white,
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 12),
 
-          const SizedBox(height: 16),
-          const Divider(color: Colors.white24, height: 1),
-          const SizedBox(height: 16),
+          // Linha divisória
+          Container(
+            height: 1,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+          const SizedBox(height: 12),
 
-          // Linha inferior
+          // Parte inferior (limite e melhor dia)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -102,40 +101,43 @@ class CartaoBankWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Limite disponível",
+                    'Limite disponível',
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 12,
+                      fontSize: 11,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "R\$ ${_cartao.availableLimit.toStringAsFixed(2).replaceAll('.', ',')}",
+                    _mostrarLimite
+                        ? currency.format(widget.cartao.availableLimit)
+                        : '••••••••',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
+
               // Melhor dia de compra
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const Text(
-                    "Melhor dia de compra",
+                    'Melhor dia de compra',
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 12,
+                      fontSize: 11,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "${_cartao.bestPurchaseDay}",
+                    '${widget.cartao.bestPurchaseDay}',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

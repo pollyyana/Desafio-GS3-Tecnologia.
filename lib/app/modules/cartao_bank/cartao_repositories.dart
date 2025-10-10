@@ -1,19 +1,17 @@
 import 'package:dio/dio.dart';
-import 'package:gs3_tecnologia/app/models/cartao_model.dart';
 
 class CartaoRepository {
   final Dio _dio;
+  final String baseUrl = 'http://192.168.15.6:8080';
 
   CartaoRepository(this._dio);
 
-  Future<List<CartaoModel>> fetchCartoes() async {
-    final response = await _dio.get('http://192.168.15.6:8080/cards');
-
-    if (response.statusCode == 200) {
-      final data = response.data as List;
-      return data.map((e) => CartaoModel.fromJson(e)).toList();
-    } else {
-      throw Exception('Erro ao buscar cartões (${response.statusCode})');
+  Future<List<Map<String, dynamic>>> getCartoes(int userId) async {
+    try {
+      final response = await _dio.get('$baseUrl/cartoes?userId=$userId');
+      return List<Map<String, dynamic>>.from(response.data);
+    } catch (e) {
+      throw Exception('Erro ao buscar cartões: $e');
     }
   }
 }

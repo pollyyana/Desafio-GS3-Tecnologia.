@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
 
 class AppbarWidget extends StatelessWidget {
   const AppbarWidget({super.key});
 
   void _onMenuPressed(BuildContext context) {
+    final messenger = ScaffoldMessenger.of(context);
     showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(10, 60, 0, 0), // ajusta posição do menu
-      items: [
+      position: const RelativeRect.fromLTRB(10, 60, 0, 0),
+      items: const [
         PopupMenuItem(
           value: 'logout',
           child: Text('Logout'),
@@ -15,9 +17,8 @@ class AppbarWidget extends StatelessWidget {
       ],
     ).then((value) {
       if (value == 'logout') {
-        // ação de logout
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Logout clicado!')),
+        messenger.showSnackBar(
+          const SnackBar(content: Text('Logout clicado!')),
         );
       }
     });
@@ -25,65 +26,79 @@ class AppbarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top,
-        left: 16,
-        right: 10,
-        bottom: 10,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Ícone de menu clicável
-          GestureDetector(
-            onTap: () => _onMenuPressed(context),
-            child: Image.asset(
-              'assets/images/menu.png', // troque pelo caminho da sua imagem
-              width: 24,
-              height: 24,
+    return SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Ícone de menu
+            GestureDetector(
+              onTap: () => _onMenuPressed(context),
+              child: Image.asset(
+                ImageConstants.menu,
+                width: 22,
+                height: 22,
+                color: Colors.white,
+              ),
             ),
-          ),
 
-          // Texto central
-          const Text(
-            'Olá, Cliente',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+            // Texto centralizado
+            const Text.rich(
+              TextSpan(
+                text: 'Olá, ',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Cliente',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-          // Ícones do lado direito
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // ação de notificações
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Notificações clicadas!')),
-                  );
-                },
-                child: Image.asset(
-                  'assets/images/chat2.png',
-                  width: 24,
-                  height: 24,
+            // Ícones à direita
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Chat clicado!')),
+                    );
+                  },
+                  child: Image.asset(
+                    ImageConstants.chat,
+                    width: 22,
+                    height: 22,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              GestureDetector(
-                onTap: () {
-                  // ação do perfil
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Perfil clicado!')),
-                  );
-                },
-                child: Image.asset(
-                  'assets/images/group.png',
-                  width: 24,
-                  height: 24,
+                const SizedBox(width: 16),
+                GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Notificações clicadas!')),
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/images/group.png',
+                    width: 22,
+                    height: 22,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

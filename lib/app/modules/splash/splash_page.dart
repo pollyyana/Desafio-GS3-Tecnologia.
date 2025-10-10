@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gs3_tecnologia/app/core/api/api_client.dart';
 import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
+import 'package:gs3_tecnologia/app/modules/login/login_controller.dart';
 import 'package:gs3_tecnologia/app/modules/login/login_page.dart';
+import 'package:gs3_tecnologia/app/modules/login/login_repository.dart';
 import 'package:gs3_tecnologia/app/modules/splash/splash_controller.dart';
 
 class SplashPage extends GetView<SplashController> {
@@ -53,7 +56,17 @@ class SplashPage extends GetView<SplashController> {
             child: Center(
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTap: () => controller.toggleLoginVisibility(),
+                // onTap: () => controller.toggleLoginVisibility(),
+                onTap: () {
+                  // Se ainda não existir o LoginController, cria agora
+                  if (!Get.isRegistered<LoginController>()) {
+                    Get.put(
+                      LoginController(LoginRepository(ApiClient.instance.dio)),
+                    );
+                  }
+                  controller.toggleLoginVisibility();
+                },
+
                 child: Image.asset(
                   ImageConstants.entrar,
                   width: 80,

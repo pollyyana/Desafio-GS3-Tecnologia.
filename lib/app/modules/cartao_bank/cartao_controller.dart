@@ -1,52 +1,33 @@
 import 'package:get/get.dart';
-import 'package:gs3_tecnologia/app/core/helpers/loader/loader_mixin.dart';
 import 'package:gs3_tecnologia/app/models/cartao_model.dart';
 import 'package:gs3_tecnologia/app/modules/cartao_bank/cartao_repositories.dart';
 
-class CartaoController extends GetxController with LoaderMixin {
-  final CartaoRepository _repository;
+class CartaoController extends GetxController {
+  final CartaoRepository repository;
+  CartaoController(this.repository);
 
-  final _cartoes = <CartaoModel>[].obs;
-  List<CartaoModel> get cartoes => _cartoes;
+  final cartoes = <CartaoModel>[].obs;
+  final cartaoAtivo = Rxn<CartaoModel>();
 
-  final _loading = false.obs;
-
-  CartaoController(this._repository);
-
-  @override
-  void onInit() {
-    super.onInit();
-    showLoader(_loading);
-    fetchCartoes();
+  Future<void> fetchCartoes(int userId) async {
+    try {
+      final data = await repository.getCartoes(userId);
+      cartoes.value = data
+          .map<CartaoModel>((json) => CartaoModel.fromJson(json))
+          .toList();
+      if (cartoes.isNotEmpty) {
+        cartaoAtivo.value = cartoes.first;
+      }
+    } catch (e) {
+      cartoes.clear();
+      print('Erro ao buscar cartões: $e');
+    }
   }
 
-  Future<void> fetchCartoes() async {
-    try {
-      _loading(true);
-      await Future.delayed(const Duration(seconds: 1)); // mock simples
-
-      _cartoes.assignAll([
-        CartaoModel(
-          id: 1,
-          bankName: 'Banco Azul',
-          lastDigits: '1234',
-          availableLimit: 2500.75,
-          bestPurchaseDay: 10,
-          userId: 1,
-        ),
-        CartaoModel(
-          id: 2,
-          bankName: 'Banco Verde',
-          lastDigits: '5678',
-          availableLimit: 4800.00,
-          bestPurchaseDay: 20,
-          userId: 1,
-        ),
-      ]);
-    } catch (e) {
-      print('Erro ao buscar cartões: $e');
-    } finally {
-      _loading(false);
+  void selecionarCartao(int id) {
+    final selecionado = cartoes.firstWhereOrNull((c) => c.id == id);
+    if (selecionado != null) {
+      cartaoAtivo.value = selecionado;
     }
   }
 }
