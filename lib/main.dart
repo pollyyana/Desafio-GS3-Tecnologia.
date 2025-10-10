@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gs3_tecnologia/app/core/api/api_client.dart';
 import 'package:gs3_tecnologia/application/all_modules.dart';
-import 'package:intl/date_symbol_data_local.dart'; // ✅ Import necessário
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

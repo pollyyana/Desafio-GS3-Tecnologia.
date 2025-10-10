@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:gs3_tecnologia/app/core/config/app_config.dart';
 
 class FaturaRepository {
   final Dio _dio;
-  final String baseUrl = 'http://192.168.15.6:8080';
+  final String baseUrl = AppConfig.baseUrl;
 
   FaturaRepository(this._dio);
 
