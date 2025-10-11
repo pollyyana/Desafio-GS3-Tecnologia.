@@ -1,16 +1,35 @@
-# gs3_tecnologia
+# Desafio GS3 Tecnologia
 
-A new Flutter project.
+Este projeto está sendo desenvolvido em Flutter, com foco em simular o gerenciamento de cartões e transações financeiras.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Estrutura de Branches
 
-A few resources to get you started if this is your first Flutter project:
+### Branch (master)
+Primeira versão do projeto.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Tecnologias utilizadas:**
+- GetX — gerenciamento de estado e navegação  
+- JSON Server — simulação de backend REST  
+- Validatorless — validações simples de formulários  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+### Branch (provider)
+Versão atual em desenvolvimento, com uma nova arquitetura baseada em MVVM.
+
+**Tecnologias utilizadas:**
+- Provider — gerenciamento de estado e injeção de dependência  
+- SQLite (sqflite) — banco de dados local  
+- Validatorless — validações de formulários  
+
+---
+
+## Objetivo
+
+A branch `provider` representa uma evolução do projeto, com foco em:
+
+- Melhor separação de responsabilidades (MVVM)  
+- Persistência local utilizando SQLite  
+- Código mais limpo, organizado e testável
