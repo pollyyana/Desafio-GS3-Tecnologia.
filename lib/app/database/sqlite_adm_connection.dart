@@ -5,7 +5,6 @@ import 'package:gs3_tecnologia/app/database/sqlite_connection_factory.dart';
 //WidgetsBindingObserver vai observar o flutter como um todo
 class SqliteAdmConnection with WidgetsBindingObserver {
   @override
-
   //metodo que diz oq o usurio fez na aplicação
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final connection = SqliteConnectionFactory();
@@ -18,8 +17,8 @@ class SqliteAdmConnection with WidgetsBindingObserver {
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-      connection.closeConnection();
-      break;
+        connection.closeConnection();
+        break;
     }
     super.didChangeAppLifecycleState(state);
   }

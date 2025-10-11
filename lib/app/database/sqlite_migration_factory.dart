@@ -2,10 +2,6 @@ import 'package:gs3_tecnologia/app/database/migrations/migration.dart';
 import 'package:gs3_tecnologia/app/database/migrations/migration_v1.dart';
 import 'package:gs3_tecnologia/app/database/migrations/migration_v2.dart';
 import 'package:gs3_tecnologia/app/database/migrations/migration_v3.dart';
-import 'package:todo_list/app/core/database/migrations/migration.dart';
-import 'package:todo_list/app/core/database/migrations/migration_v1.dart';
-import 'package:todo_list/app/core/database/migrations/migration_v2.dart';
-import 'package:todo_list/app/core/database/migrations/migration_v3.dart';
 
 class SqliteMigrationFactory {
   List<Migration> getCreateMigration() => [
