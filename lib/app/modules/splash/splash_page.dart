@@ -6,7 +6,7 @@ import 'package:gs3_tecnologia/app/modules/login/login_page.dart';
 import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  const SplashPage({super.key}); // sem parâmetros
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -32,6 +32,8 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loginController = context.read<LoginController>(); // pega do Provider
+
     return Scaffold(
       body: Stack(
         children: [
@@ -47,7 +49,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
           ),
 
-          // Logo na Splash
+          // Logo
           Positioned(
             top: context.height(0.15),
             left: 60,
@@ -64,7 +66,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
           ),
 
-          // Botão para login
+          // Botão login
           Positioned(
             top: context.height(0.50),
             left: 0,
@@ -81,7 +83,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
           ),
 
-          // Ícones abaixo da Splash
+          // Ícones abaixo
           Positioned(
             bottom: 87,
             left: 0,
@@ -104,7 +106,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
           ),
 
-          // Exibe o LoginPage quando showLogin for true
+          // Login sobreposto
           if (showLogin)
             Positioned.fill(
               child: GestureDetector(
@@ -112,10 +114,7 @@ class _SplashPageState extends State<SplashPage> {
                 child: Container(
                   color: Colors.black.withOpacity(0.3),
                   child: ChangeNotifierProvider.value(
-                    value: context
-                        .read<
-                          LoginController
-                        >(), // Usando o LoginController injetado
+                    value: loginController,
                     child: const LoginPage(),
                   ),
                 ),

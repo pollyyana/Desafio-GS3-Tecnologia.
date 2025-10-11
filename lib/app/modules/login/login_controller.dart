@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gs3_tecnologia/app/services/user_service.dart';
+import 'package:gs3_tecnologia/app/modules/home/home_page.dart';
+import 'package:gs3_tecnologia/app/services/login_service.dart';
 
 class LoginController extends ChangeNotifier {
-  final UserService _userService;
+  final LoginService _loginService;
 
   final cpfController = TextEditingController();
-  final senhaController = TextEditingController();
+  final passwordController = TextEditingController();
 
   bool _obscurePassword = true;
   bool get obscurePassword => _obscurePassword;
@@ -13,9 +14,10 @@ class LoginController extends ChangeNotifier {
   bool _isFormValid = false;
   bool get isFormValid => _isFormValid;
 
-  LoginController(this._userService) {
+  LoginController({required LoginService loginService})
+    : _loginService = loginService {
     cpfController.addListener(_validateForm);
-    senhaController.addListener(_validateForm);
+    passwordController.addListener(_validateForm);
   }
 
   void togglePasswordVisibility() {
@@ -25,8 +27,8 @@ class LoginController extends ChangeNotifier {
 
   void _validateForm() {
     final cpf = cpfController.text.trim();
-    final senha = senhaController.text.trim();
-    final isValid = cpf.isNotEmpty && senha.isNotEmpty;
+    final password = passwordController.text.trim();
+    final isValid = cpf.isNotEmpty && password.isNotEmpty;
 
     if (_isFormValid != isValid) {
       _isFormValid = isValid;
@@ -34,18 +36,29 @@ class LoginController extends ChangeNotifier {
     }
   }
 
-  Future<bool> login() async {
+  Future<void> login(BuildContext context) async {
     final cpf = cpfController.text.trim();
-    final senha = senhaController.text.trim();
+    final password = passwordController.text.trim();
 
-    final user = await _userService.login(cpf, senha);
-    return user != null;
+    final user = await _loginService.login(cpf, password);
+
+    if (user != null) {
+      // login bem-sucedido: navega para HomePage
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const HomePage()),
+      );
+    } else {
+      // login falhou: exibe mensagem
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('CPF ou senha incorretos')),
+      );
+    }
   }
 
   @override
   void dispose() {
     cpfController.dispose();
-    senhaController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 }

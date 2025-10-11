@@ -64,11 +64,10 @@ class LoginPage extends StatelessWidget {
                       Validatorless.required('Informe o CPF'),
                       Validatorless.cpf('CPF inválido'),
                     ]),
-                    // onChanged: (_) => controller._validateForm(),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    controller: controller.senhaController,
+                    controller: controller.passwordController,
                     obscureText: controller.obscurePassword,
                     decoration: InputDecoration(
                       labelText: 'Senha',
@@ -92,7 +91,6 @@ class LoginPage extends StatelessWidget {
                         'A senha deve ter pelo menos 6 caracteres',
                       ),
                     ]),
-                    // onChanged: (_) => controller.checkFormValidity(),
                   ),
                   const SizedBox(height: 24),
                   SizedBox(
@@ -102,8 +100,7 @@ class LoginPage extends StatelessWidget {
                       onPressed: controller.isFormValid
                           ? () {
                               if (formKey.currentState!.validate()) {
-                                controller
-                                    .login(); // Agora não precisa passar nada
+                                controller.login(context); // passa o context
                               }
                             }
                           : null,

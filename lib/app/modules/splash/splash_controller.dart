@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class SplashController extends ChangeNotifier {
   bool _showLogin = false;
-
   bool get showLogin => _showLogin;
 
   void toggleLoginVisibility() {

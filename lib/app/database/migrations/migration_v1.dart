@@ -18,7 +18,7 @@ class MigrationV1 implements Migration {
     // Insere dados fixos na tabela users
     batch.execute('''
       INSERT INTO users (name, cpf, password) VALUES
-      ('João Silva', '123.456.789-00', 'senha123'),
+      ('Pollyana Medeiros', '064.084.141-41', '123123');,
       ('Maria Oliveira', '987.654.321-00', 'minhasenha');
     ''');
 

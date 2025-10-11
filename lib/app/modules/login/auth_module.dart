@@ -1,47 +1,40 @@
 import 'package:gs3_tecnologia/app/core/modulo/bank_list_module.dart';
+import 'package:gs3_tecnologia/app/database/sqlite_connection_factory.dart';
 import 'package:gs3_tecnologia/app/modules/login/login_controller.dart';
+import 'package:gs3_tecnologia/app/modules/login/login_page.dart';
 import 'package:gs3_tecnologia/app/modules/splash/splash_controller.dart';
-import 'package:gs3_tecnologia/app/modules/splash/splash_page.dart';
-import 'package:gs3_tecnologia/app/services/user_service.dart';
+import 'package:gs3_tecnologia/app/repositories/login_repository.dart';
+import 'package:gs3_tecnologia/app/repositories/login_repository_impl.dart';
+import 'package:gs3_tecnologia/app/services/login_service.dart';
+import 'package:gs3_tecnologia/app/services/login_service_impl.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 class AuthModule extends BankListModule {
+  final List<SingleChildWidget> providers;
+
   AuthModule()
-    : super(
-        bindings: [
-          ChangeNotifierProvider(
-            create: (context) => SplashController(
-              // userService: context.read(),
-            ),
+    : providers = [
+        Provider<LoginRepository>(
+          create: (_) => LoginRepositoryImpl(SqliteConnectionFactory()),
+        ),
+        Provider<LoginService>(
+          create: (context) =>
+              LoginServiceImpl(repository: context.read<LoginRepository>()),
+        ),
+        ChangeNotifierProvider<LoginController>(
+          create: (context) => LoginController(
+            loginService: context.read<LoginService>(),
           ),
-          ChangeNotifierProvider(
-            create: (context) => LoginController(context.read<UserService>()),
-          ),
-        ],
+        ),
+        ChangeNotifierProvider<SplashController>(
+          create: (context) => SplashController(),
+        ),
+      ],
+      super(
+        bindings: [],
         routers: {
-          '/login': (context) => const SplashPage(),
+          '/login': (context) => LoginPage(),
         },
       );
 }
-
-// bankListPage vai encapsular as rotas automaticamente pra nao ter que passar aqui
-// class AuthModule extends TodoListModule {
-//   @override
-//   AuthModule() : super(
-//     bindings: [
-//       ChangeNotifierProvider(
-//         create: (_) => LoginController(),
-//       ), // // ChangeNotifierProvider
-//     ],
-//     routers: [
-//       '/login': (context) => MultiProvider(
-//         providers: [
-//           ChangeNotifierProvider(
-//             create: (_) => LoginController(),
-//           ), // // ChangeNotifierProvider
-//         ],
-//         child: LoginPage(),
-//       ), // // MultiProvider
-//     ],
-//   );
-// }
