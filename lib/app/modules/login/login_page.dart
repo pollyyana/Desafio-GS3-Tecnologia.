@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
-import 'login_controller.dart'; // seu controller
+import 'login_controller.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<LoginController>();
+    final controller = context.watch<LoginController>();
     final formKey = GlobalKey<FormState>();
 
     return Scaffold(
@@ -40,12 +40,12 @@ class LoginPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Seja bem-vindo(a)!',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  const Text(
                     'Digite sua senha do aplicativo.',
                     style: TextStyle(fontSize: 14, color: Colors.black54),
                   ),
@@ -64,6 +64,7 @@ class LoginPage extends StatelessWidget {
                       Validatorless.required('Informe o CPF'),
                       Validatorless.cpf('CPF inválido'),
                     ]),
+                    // onChanged: (_) => controller._validateForm(),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
@@ -91,6 +92,7 @@ class LoginPage extends StatelessWidget {
                         'A senha deve ter pelo menos 6 caracteres',
                       ),
                     ]),
+                    // onChanged: (_) => controller.checkFormValidity(),
                   ),
                   const SizedBox(height: 24),
                   SizedBox(
@@ -100,7 +102,8 @@ class LoginPage extends StatelessWidget {
                       onPressed: controller.isFormValid
                           ? () {
                               if (formKey.currentState!.validate()) {
-                                controller.login();
+                                controller
+                                    .login(); // Agora não precisa passar nada
                               }
                             }
                           : null,

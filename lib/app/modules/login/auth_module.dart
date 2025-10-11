@@ -1,25 +1,25 @@
 import 'package:gs3_tecnologia/app/core/modulo/bank_list_module.dart';
 import 'package:gs3_tecnologia/app/modules/login/login_controller.dart';
-import 'package:gs3_tecnologia/app/modules/login/login_page.dart';
+import 'package:gs3_tecnologia/app/modules/splash/splash_controller.dart';
+import 'package:gs3_tecnologia/app/modules/splash/splash_page.dart';
+import 'package:gs3_tecnologia/app/services/user_service.dart';
 import 'package:provider/provider.dart';
 
 class AuthModule extends BankListModule {
   AuthModule()
     : super(
-        //fica as dependecias
         bindings: [
           ChangeNotifierProvider(
-            create: (context) => LoginController(
+            create: (context) => SplashController(
               // userService: context.read(),
             ),
           ),
-          // ChangeNotifierProvider(
-          //   create: (context) =>
-          //       RegisterController(userService: context.read()),
-          // ),
+          ChangeNotifierProvider(
+            create: (context) => LoginController(context.read<UserService>()),
+          ),
         ],
         routers: {
-          '/login': (context) => const LoginPage(),
+          '/login': (context) => const SplashPage(),
         },
       );
 }

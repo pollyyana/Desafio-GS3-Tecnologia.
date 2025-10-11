@@ -1,36 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/services/user_service.dart';
 
 class LoginController extends ChangeNotifier {
+  final UserService _userService;
+
+  final cpfController = TextEditingController();
+  final senhaController = TextEditingController();
+
   bool _obscurePassword = true;
   bool get obscurePassword => _obscurePassword;
 
   bool _isFormValid = false;
   bool get isFormValid => _isFormValid;
 
-  // Pode receber o repositório via construtor, por exemplo:
-  // final UserRepository _userRepository;
-  // LoginController(this._userRepository);
+  LoginController(this._userService) {
+    cpfController.addListener(_validateForm);
+    senhaController.addListener(_validateForm);
+  }
 
   void togglePasswordVisibility() {
     _obscurePassword = !_obscurePassword;
     notifyListeners();
   }
 
-  void checkFormValidity(String cpf, String senha) {
-    final isValid = cpf.trim().isNotEmpty && senha.trim().isNotEmpty;
+  void _validateForm() {
+    final cpf = cpfController.text.trim();
+    final senha = senhaController.text.trim();
+    final isValid = cpf.isNotEmpty && senha.isNotEmpty;
+
     if (_isFormValid != isValid) {
       _isFormValid = isValid;
       notifyListeners();
     }
   }
 
-  Future<bool> login({required String cpf, required String senha}) async {
-    // Aqui você pode chamar o banco, validar usuário, etc.
-    // Exemplo fictício:
-    // final user = await _userRepository.getUserByCpf(cpf);
-    // if (user != null && user.password == senha) return true;
+  Future<bool> login() async {
+    final cpf = cpfController.text.trim();
+    final senha = senhaController.text.trim();
 
-    print('Login com CPF: $cpf e Senha: $senha');
-    return true;
+    final user = await _userService.login(cpf, senha);
+    return user != null;
+  }
+
+  @override
+  void dispose() {
+    cpfController.dispose();
+    senhaController.dispose();
+    super.dispose();
   }
 }

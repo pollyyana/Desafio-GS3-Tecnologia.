@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 
-class FontConstants {
-  // Famílias de fontes
-  static const String manrope = 'Manrope';
-  static const String mulish = 'Mulish';
+// class FontConstants {
+//   // Famílias de fontes
 
-  // Pesos de fonte
-  static const FontWeight thin = FontWeight.w100;
-  static const FontWeight extraLight = FontWeight.w200;
-  static const FontWeight light = FontWeight.w300;
-  static const FontWeight regular = FontWeight.w400;
-  static const FontWeight medium = FontWeight.w500;
-  static const FontWeight semiBold = FontWeight.w600;
-  static const FontWeight bold = FontWeight.w700;
-  static const FontWeight extraBold = FontWeight.w800;
-}
+//   // Pesos de fonte
+//   static const FontWeight thin = FontWeight.w100;
+//   static const FontWeight extraLight = FontWeight.w200;
+//   static const FontWeight light = FontWeight.w300;
+//   static const FontWeight regular = FontWeight.w400;
+//   static const FontWeight medium = FontWeight.w500;
+//   static const FontWeight semiBold = FontWeight.w600;
+//   static const FontWeight bold = FontWeight.w700;
+//   static const FontWeight extraBold = FontWeight.w800;
+// }
 
 class ImageConstants {
   static const String backgroudChair = 'assets/images/background.png';
