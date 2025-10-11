@@ -7,13 +7,15 @@ class LoginController extends ChangeNotifier {
   bool _isFormValid = false;
   bool get isFormValid => _isFormValid;
 
-  // Troca visibilidade da senha
+  // Pode receber o repositório via construtor, por exemplo:
+  // final UserRepository _userRepository;
+  // LoginController(this._userRepository);
+
   void togglePasswordVisibility() {
     _obscurePassword = !_obscurePassword;
     notifyListeners();
   }
 
-  // Valida se CPF e senha foram preenchidos
   void checkFormValidity(String cpf, String senha) {
     final isValid = cpf.trim().isNotEmpty && senha.trim().isNotEmpty;
     if (_isFormValid != isValid) {
@@ -22,9 +24,13 @@ class LoginController extends ChangeNotifier {
     }
   }
 
-  // Lógica de login (exemplo simples)
-  void login({required String cpf, required String senha}) {
+  Future<bool> login({required String cpf, required String senha}) async {
+    // Aqui você pode chamar o banco, validar usuário, etc.
+    // Exemplo fictício:
+    // final user = await _userRepository.getUserByCpf(cpf);
+    // if (user != null && user.password == senha) return true;
+
     print('Login com CPF: $cpf e Senha: $senha');
-    // aqui você chama o repository, faz validações, navega, etc
+    return true;
   }
 }
