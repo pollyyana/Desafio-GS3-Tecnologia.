@@ -12,8 +12,25 @@ Primeira versão do projeto.
 **Tecnologias utilizadas:**
 - GetX — gerenciamento de estado e navegação  
 - JSON Server — simulação de backend REST  
-- Validatorless — validações simples de formulários  
+- Validatorless — validações simples de formulários
 
+**Como iniciar o projeto (backend JSON Server):**
+
+Acesse a pasta do backend na raiz do projeto:
+
+- cd backend
+- 
+Ative o pacote globalmente (caso ainda não tenha feito):
+
+- dart pub global activate json_rest_server
+  
+Inicie o servidor:
+
+jrs run
+
+Teste o navegador
+
+- http://localhost:8080/users
 ---
 
 ### Branch (provider)
