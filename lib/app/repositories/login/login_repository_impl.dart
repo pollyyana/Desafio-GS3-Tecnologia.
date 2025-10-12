@@ -16,7 +16,6 @@ class LoginRepositoryImpl implements LoginRepository {
     try {
       final db = await _connectionFactory.openConnection();
 
-      // Remove espaços extras antes e depois
       final inputCpf = cpf.trim();
 
       final result = await db.query(

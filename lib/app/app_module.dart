@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gs3_tecnologia/app/app_widget.dart';
 import 'package:gs3_tecnologia/app/database/sqlite_connection_factory.dart';
-import 'package:gs3_tecnologia/app/repositories/login_repository.dart';
-import 'package:gs3_tecnologia/app/repositories/login_repository_impl.dart';
+import 'package:gs3_tecnologia/app/repositories/login/login_repository.dart';
+import 'package:gs3_tecnologia/app/repositories/login/login_repository_impl.dart';
 import 'package:provider/provider.dart';
 
 class AppModule extends StatelessWidget {

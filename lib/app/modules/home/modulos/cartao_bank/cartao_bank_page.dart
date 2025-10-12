@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gs3_tecnologia/app/models/cartao_model.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_controller.dart';
+import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_controller.dart';
 import 'package:provider/provider.dart';
 
 class CartaoBankPage extends StatefulWidget {
@@ -16,9 +17,24 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
-      context.read<CartaoController>().fetchCartoes();
+
+      final cartaoController = context.read<CartaoController>();
+      final faturaController = context.read<FaturaController>();
+
+      await cartaoController.fetchCartoes();
+
+      // Seleciona o primeiro cartão e carrega as faturas correspondentes
+      if (cartaoController.cartoes.isNotEmpty) {
+        final primeiroCartao = cartaoController.cartoes.first;
+        cartaoController.selecionarCartao(primeiroCartao);
+        faturaController.carregarFaturas(primeiroCartao.id);
+
+        debugPrint(
+          'Cartão inicial selecionado: ${primeiroCartao.name} (id ${primeiroCartao.id})',
+        );
+      }
     });
   }
 
@@ -47,8 +63,20 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
               height: 190,
               child: PageView.builder(
                 controller: _pageController,
+                onPageChanged: (index) {
+                  final cartaoSelecionado = controller.cartoes[index];
+                  controller.selecionarCartao(cartaoSelecionado);
+
+                  debugPrint(
+                    'Cartão selecionado: ${cartaoSelecionado.name} (id ${cartaoSelecionado.id})',
+                  );
+
+                  // Atualiza faturas do cartão selecionado
+                  final faturaController = context.read<FaturaController>();
+                  faturaController.carregarFaturas(cartaoSelecionado.id);
+                },
                 itemCount: controller.cartoes.length,
-                padEnds: false, // ✅ elimina o espaço automático nas bordas
+                padEnds: false,
                 itemBuilder: (context, index) {
                   final cartao = controller.cartoes[index];
                   return Padding(

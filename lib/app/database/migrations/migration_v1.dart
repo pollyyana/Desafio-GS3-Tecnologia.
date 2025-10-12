@@ -5,7 +5,7 @@ import 'migration.dart';
 class MigrationV1 implements Migration {
   @override
   void create(Batch batch) {
-    // Criação da tabela users
+    // ===== USERS =====
     batch.execute('''
       CREATE TABLE users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,14 +15,13 @@ class MigrationV1 implements Migration {
       );
     ''');
 
-    // Insere dados fixos na tabela users
     batch.execute('''
-      INSERT INTO users (name, cpf, password) VALUES
-      ('Pollyana Medeiros', '064.084.141-41', '123123'),
-      ('Maria Oliveira', '987.654.321-00', 'minhasenha');
+      INSERT INTO users (id, name, cpf, password) VALUES
+      (1, 'Pollyana Banco', '064.084.141-41', '123123'),
+      (2, 'Laura', '109.876.543-21', '123123');
     ''');
 
-    // Criação da tabela cartoes
+    // ===== CARTOES =====
     batch.execute('''
       CREATE TABLE cartoes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,15 +34,15 @@ class MigrationV1 implements Migration {
       );
     ''');
 
-    // Insere dados fixos na tabela cartoes
     batch.execute('''
-      INSERT INTO cartoes (name, digitos, limit_value, day, user_id) VALUES
-      ('Visa Gold', 1234, 5000.00, 10, 1),
-      ('Mastercard Platinum', 5678, 10000.00, 15, 2);
+      INSERT INTO cartoes (id, name, digitos, limit_value, day, user_id) VALUES
+      (1, 'GS3 TEC', 5621, 7867.80, 20, 1),
+      (2, 'Banco Neon', 9034, 5230.50, 10, 1);
     ''');
 
+    // ===== FATURAS / TRANSACTIONS =====
     batch.execute('''
-      CREATE TABLE transactions (
+      CREATE TABLE faturas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         cartao_id INTEGER NOT NULL,
         date TEXT NOT NULL,
@@ -54,17 +53,18 @@ class MigrationV1 implements Migration {
       );
     ''');
 
-    // Insere dados fixos na tabela transactions
     batch.execute('''
-      INSERT INTO transactions (cartao_id, date, title, amount, parcelas) VALUES
-      (1, '2024-10-10', 'Compra Supermercado', 150.75, '3x'),
-      (2, '2024-10-09', 'Pagamento Netflix', 29.90, NULL);
+      INSERT INTO faturas (id, cartao_id, date, title, amount, parcelas) VALUES
+      (1, 1, '2025-09-05T22:35:00Z', 'Apple', 545.99, '12x'),
+      (2, 1, '2025-09-05T15:25:00Z', 'Uber*Uber*Trip', 12.96, NULL),
+      (3, 1, '2025-09-03T09:34:00Z', 'Carrefour', 349.76, '3x'),
+      (4, 2, '2025-09-06T18:22:00Z', 'Netflix', 55.90, NULL),
+      (5, 2, '2025-09-04T13:40:00Z', 'Ifood', 28.50, NULL);
     ''');
   }
 
   @override
   void update(Batch batch) {
-    // Para versão 1, update é igual a create
     create(batch);
   }
 }

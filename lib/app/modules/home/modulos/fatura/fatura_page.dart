@@ -1,200 +1,213 @@
-// import 'package:flutter/material.dart';
-// import 'package:gs3_tecnologia/app/core/utils/constants.dart';
-// import 'package:intl/intl.dart';
-// import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/utils/constants.dart';
+import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_controller.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-// class FaturaPage extends StatelessWidget {
-//   const FaturaPage({super.key});
+class FaturaPage extends StatefulWidget {
+  const FaturaPage({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final currency = NumberFormat.simpleCurrency(locale: 'pt_BR');
+  @override
+  State<FaturaPage> createState() => _FaturaPageState();
+}
 
-//     return Consumer<FaturaController>(
-//       builder: (context, controller, _) {
-//         final faturas = controller.faturas;
+class _FaturaPageState extends State<FaturaPage>
+    with SingleTickerProviderStateMixin {
+  bool mostrarTodas = false;
 
-//         if (faturas.isEmpty) {
-//           return const Center(
-//             child: Text(
-//               'Nenhum lançamento encontrado',
-//               style: TextStyle(color: Colors.grey),
-//             ),
-//           );
-//         }
+  @override
+  Widget build(BuildContext context) {
+    final currency = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
-//         // 🔹 Agrupa faturas por dia
-//         final Map<String, List> grouped = {};
-//         for (var f in faturas) {
-//           final dateKey = DateFormat('dd MMM', 'pt_BR').format(f.date);
-//           grouped.putIfAbsent(dateKey, () => []).add(f);
-//         }
+    return Consumer<FaturaController>(
+      builder: (context, controller, _) {
+        if (controller.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-//         final keys = grouped.keys.toList();
+        if (controller.errorMessage != null) {
+          return Center(
+            child: Text(
+              controller.errorMessage!,
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
 
-//         return Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // 🔹 Cabeçalho
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: const [
-//                   Text(
-//                     'Últimos lançamentos',
-//                     style: TextStyle(
-//                       fontSize: 18,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   Text(
-//                     'Ver todos',
-//                     style: TextStyle(
-//                       color: Color(0xFF2B66BC),
-//                       fontWeight: FontWeight.w600,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             const SizedBox(height: 12),
+        if (controller.faturas.isEmpty) {
+          return const Center(
+            child: Text(
+              'Nenhum lançamento encontrado\nSelecione um cartão',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+          );
+        }
 
-//             Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: keys.map((key) {
-//                 final transacoes = grouped[key]!;
+        // Mostra 4 se estiver recolhido, todas se estiver expandido
+        final faturas = mostrarTodas
+            ? controller.faturas
+            : controller.faturas.take(4).toList();
 
-//                 // título de data ("Hoje, 05 Set" se for a data atual)
-//                 final DateTime firstDate = transacoes.first.date;
-//                 final bool isToday =
-//                     DateFormat('dd/MM').format(firstDate) ==
-//                     DateFormat('dd/MM').format(DateTime.now());
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Cabeçalho: "Últimos lançamentos" + "Ver todos"
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Últimos lançamentos',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        mostrarTodas = !mostrarTodas;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          mostrarTodas ? 'Ver menos' : 'Ver todos',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        AnimatedRotation(
+                          turns: mostrarTodas ? 0.5 : 0,
+                          duration: const Duration(milliseconds: 300),
+                          child: Image.asset(
+                            ImageConstants.arrowRight,
+                            width: 14,
+                            height: 14,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
 
-//                 final String tituloData = isToday
-//                     ? 'Hoje, ${DateFormat('dd MMM', 'pt_BR').format(firstDate)}'
-//                     : key;
+            // Lista animada
+            AnimatedSize(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: faturas.length,
+                itemBuilder: (context, index) {
+                  final fatura = faturas[index];
+                  final iconPath = _getIconForTransaction(fatura.title);
 
-//                 return Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(
-//                         horizontal: 8.0,
-//                         vertical: 6,
-//                       ),
-//                       child: Text(
-//                         tituloData,
-//                         style: const TextStyle(
-//                           fontSize: 15,
-//                           color: Color(0xFF2B66BC),
-//                           fontWeight: FontWeight.w600,
-//                         ),
-//                       ),
-//                     ),
-//                     ...transacoes.map((f) {
-//                       final iconPath = _getIconForTransaction(f.title);
+                  return Container(
+                    width: double.infinity,
+                    height: 70,
+                    margin: const EdgeInsets.only(
+                      bottom: 10,
+                      left: 8,
+                      right: 8,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: Colors.grey.shade200, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Ícone + título + data
+                        Row(
+                          children: [
+                            Image.asset(iconPath, width: 38, height: 38),
+                            const SizedBox(width: 14),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  fatura.title,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  DateFormat(
+                                    'dd/MM • HH:mm',
+                                    'pt_BR',
+                                  ).format(fatura.date),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
 
-//                       return Container(
-//                         width: double.infinity,
-//                         height: 70,
-//                         margin: const EdgeInsets.only(bottom: 10),
-//                         padding: const EdgeInsets.symmetric(horizontal: 16),
-//                         decoration: BoxDecoration(
-//                           color: Colors.white,
-//                           borderRadius: BorderRadius.circular(14),
-//                           border: Border.all(
-//                             color: Colors.grey.shade200,
-//                             width: 1,
-//                           ),
-//                           boxShadow: [
-//                             BoxShadow(
-//                               color: Colors.black.withOpacity(0.06),
-//                               blurRadius: 6,
-//                               offset: const Offset(0, 3),
-//                             ),
-//                           ],
-//                         ),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           children: [
-//                             Row(
-//                               children: [
-//                                 Image.asset(
-//                                   iconPath,
-//                                   width: 38,
-//                                   height: 38,
-//                                 ),
-//                                 const SizedBox(width: 14),
-//                                 Column(
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   mainAxisAlignment: MainAxisAlignment.center,
-//                                   children: [
-//                                     Text(
-//                                       f.title,
-//                                       style: const TextStyle(
-//                                         fontSize: 16,
-//                                         fontWeight: FontWeight.w600,
-//                                       ),
-//                                     ),
-//                                     const SizedBox(height: 4),
-//                                     Text(
-//                                       DateFormat(
-//                                         'dd/MM • HH:mm',
-//                                         'pt_BR',
-//                                       ).format(f.date),
-//                                       style: const TextStyle(
-//                                         fontSize: 12,
-//                                         color: Colors.grey,
-//                                       ),
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ],
-//                             ),
+                        // Valor e parcelas
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              currency.format(fatura.amount),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (fatura.parcelas.toString().isNotEmpty)
+                              Text(
+                                'em ${fatura.parcelas}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade500,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-//                             // Valor
-//                             Column(
-//                               mainAxisAlignment: MainAxisAlignment.center,
-//                               crossAxisAlignment: CrossAxisAlignment.end,
-//                               children: [
-//                                 Text(
-//                                   currency.format(f.amount),
-//                                   style: const TextStyle(
-//                                     fontSize: 16,
-//                                     fontWeight: FontWeight.bold,
-//                                   ),
-//                                 ),
-//                                 Text(
-//                                   'em 3x',
-//                                   style: TextStyle(
-//                                     fontSize: 12,
-//                                     color: Colors.grey.shade500,
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       );
-//                     }),
-//                   ],
-//                 );
-//               }).toList(),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-
-//   String _getIconForTransaction(String title) {
-//     if (title.toLowerCase().contains('uber')) return ImageConstants.uber;
-//     if (title.toLowerCase().contains('apple')) return ImageConstants.mobile;
-//     if (title.toLowerCase().contains('carrefour')) {
-//       return ImageConstants.mercado;
-//     }
-
-//     return ImageConstants.shope;
-//   }
-// }
+  String _getIconForTransaction(String title) {
+    final lower = title.toLowerCase();
+    if (lower.contains('uber')) return ImageConstants.uber;
+    if (lower.contains('apple')) return ImageConstants.mobile;
+    if (lower.contains('carrefour')) return ImageConstants.mercado;
+    if (lower.contains('conta vivo')) return ImageConstants.mobile;
+    return ImageConstants.shope;
+  }
+}

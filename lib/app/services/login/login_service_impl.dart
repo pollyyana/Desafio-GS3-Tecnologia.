@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:gs3_tecnologia/app/exceptions/exception.dart';
 import 'package:gs3_tecnologia/app/models/user_model.dart';
-import 'package:gs3_tecnologia/app/repositories/login_repository.dart';
+import 'package:gs3_tecnologia/app/repositories/login/login_repository.dart';
 import 'package:gs3_tecnologia/app/services/login/login_service.dart';
 
 class LoginServiceImpl implements LoginService {

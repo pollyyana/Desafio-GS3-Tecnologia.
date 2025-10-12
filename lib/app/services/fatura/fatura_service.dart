@@ -1,0 +1,6 @@
+import 'package:gs3_tecnologia/app/models/fatura_model.dart';
+
+abstract class FaturaService {
+  Future<List<FaturaModel>> buscarFaturasPorCartao(int cartaoId);
+  Future<void> salvarFatura(FaturaModel fatura, int cartaoId);
+}

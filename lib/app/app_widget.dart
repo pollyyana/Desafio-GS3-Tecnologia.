@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gs3_tecnologia/app/database/sqlite_adm_connection.dart';
 import 'package:gs3_tecnologia/app/modules/home/home_modulo.dart';
+import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_module.dart';
+import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_module.dart';
 import 'package:gs3_tecnologia/app/modules/login/auth_module.dart';
 import 'package:gs3_tecnologia/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +14,7 @@ class AppWidget extends StatefulWidget {
   State<AppWidget> createState() => _AppWidgetState();
 }
 
-class _AppWidgetState extends State<AppWidget> {
+class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
   final sqliteAdmConnection = SqliteAdmConnection();
 
   @override
@@ -22,18 +24,37 @@ class _AppWidgetState extends State<AppWidget> {
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(sqliteAdmConnection);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final authModule = AuthModule();
     final homeModule = HomeModule();
+    final cartaoModule = CartaoModule();
+    final faturaModule = FaturaModule();
 
     return MultiProvider(
-      providers: authModule.providers,
+      providers: [
+        ...authModule.providers,
+        ...homeModule.bindings,
+        ...cartaoModule.bindings,
+        ...faturaModule.bindings,
+      ],
       child: MaterialApp(
         title: 'gs3',
-        initialRoute: '/home',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+          useMaterial3: true,
+        ),
+        // initialRoute: '/home',
         routes: {
           ...authModule.routers,
           ...homeModule.routers,
+          ...cartaoModule.routers,
+          ...faturaModule.routers,
         },
         home: const SplashPage(),
       ),

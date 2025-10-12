@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_bank_page.dart';
+import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_page.dart';
 import 'package:gs3_tecnologia/app/modules/home/widgets/appbar_widget.dart';
 import 'package:gs3_tecnologia/app/modules/home/widgets/favoritos_widget.dart';
 
@@ -20,7 +21,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 18),
+          padding: const EdgeInsets.only(left: 10),
           child: Column(
             children: [
               const AppbarWidget(),
@@ -28,32 +29,35 @@ class HomePage extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CartaoBankPage(),
-                        const Divider(
-                          color: Colors.white,
-                          thickness: 1,
-                          endIndent: 19,
-                        ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
 
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: const FavoritosWidget(),
-                        ),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 1,
-                          endIndent: 19,
-                        ),
+                      // --- Cartões ---
+                      const CartaoBankPage(),
 
-                        // const SizedBox(height: 16),
-                        // const Fatura(),
-                      ],
-                    ),
+                      const SizedBox(height: 5),
+                      const Divider(color: Colors.white, endIndent: 19),
+
+                      // --- Meus Favoritos ---
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: FavoritosWidget(),
+                      ),
+
+                      const SizedBox(height: 10),
+                      const Divider(
+                        color: Colors.black12,
+                        thickness: 0.6,
+                        endIndent: 19,
+                      ),
+
+                      const SizedBox(height: 10),
+                      const FaturaPage(),
+
+                      const SizedBox(height: 30),
+                    ],
                   ),
                 ),
               ),
@@ -61,7 +65,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      // bottomNavigationBar: const BottomBarWidget(),
     );
   }
 }

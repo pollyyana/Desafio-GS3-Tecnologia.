@@ -6,24 +6,21 @@ abstract class BankListModule {
   final Map<String, WidgetBuilder> _routers;
   final List<SingleChildWidget>? _bindings;
 
-  //construtor
   BankListModule({
     List<SingleChildWidget>? bindings,
     required Map<String, WidgetBuilder> routers,
   }) : _routers = routers,
        _bindings = bindings;
 
-  //todoListPage login page foi encapsulado encima do todo..
+  // Novo getter público — resolve o erro
+  List<SingleChildWidget> get bindings => _bindings ?? [];
+
   Map<String, WidgetBuilder> get routers {
-    // Cria um novo mapa de rotas, onde cada rota será exibida dentro de um BankListPage
     return _routers.map(
       (key, pageBuilder) => MapEntry(
-        key, // mantém a mesma chave (nome da rota)
-        // substitui a página original por uma função que retorna um BankListPage
+        key,
         (_) => BankListPage(
-          // injeta as dependências necessárias
           bindings: _bindings,
-          // define a página real que será exibida dentro do layout padrão
           page: pageBuilder,
         ),
       ),
@@ -38,6 +35,6 @@ abstract class BankListModule {
         bindings: _bindings,
       );
     }
-    throw Exception();
+    throw Exception('Rota não encontrada: $path');
   }
 }

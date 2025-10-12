@@ -12,6 +12,9 @@ class CartaoController extends ChangeNotifier {
   bool isLoading = false;
   List<CartaoModel> cartoes = [];
 
+  CartaoModel? _cartaoSelecionado;
+  CartaoModel? get cartaoSelecionado => _cartaoSelecionado;
+
   Future<void> fetchCartoes() async {
     try {
       isLoading = true;
@@ -28,5 +31,10 @@ class CartaoController extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  void selecionarCartao(CartaoModel cartao) {
+    _cartaoSelecionado = cartao;
+    notifyListeners();
   }
 }
