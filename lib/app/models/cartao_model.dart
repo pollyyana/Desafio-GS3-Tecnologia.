@@ -1,5 +1,5 @@
 class CartaoModel {
-  final int? id;
+  final int id;
   final String name;
   final int digitos;
   final double limitValue;
@@ -7,7 +7,7 @@ class CartaoModel {
   final int userId;
 
   CartaoModel({
-    this.id,
+    required this.id,
     required this.name,
     required this.digitos,
     required this.limitValue,
@@ -17,12 +17,12 @@ class CartaoModel {
 
   factory CartaoModel.fromMap(Map<String, dynamic> map) {
     return CartaoModel(
-      id: map['id'],
-      name: map['name'],
-      digitos: map['digitos'],
-      limitValue: map['limit_value'],
-      day: map['day'],
-      userId: map['user_id'],
+      id: map['id'] as int,
+      name: map['name'] as String,
+      digitos: map['digitos'] as int,
+      limitValue: (map['limit_value'] as num).toDouble(),
+      day: map['day'] as int,
+      userId: map['user_id'] as int,
     );
   }
 

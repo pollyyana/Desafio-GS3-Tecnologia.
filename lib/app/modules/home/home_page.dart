@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_bank_page.dart';
+import 'package:gs3_tecnologia/app/modules/home/widgets/appbar_widget.dart';
+import 'package:gs3_tecnologia/app/modules/home/widgets/favoritos_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -6,10 +9,59 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
+      backgroundColor: Colors.white,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF2B66BC), Colors.white],
+            stops: [0.0, 0.5],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 18),
+          child: Column(
+            children: [
+              const AppbarWidget(),
+              const Divider(color: Colors.white, thickness: 1, endIndent: 19),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CartaoBankPage(),
+                        const Divider(
+                          color: Colors.white,
+                          thickness: 1,
+                          endIndent: 19,
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: const FavoritosWidget(),
+                        ),
+                        const Divider(
+                          color: Colors.black,
+                          thickness: 1,
+                          endIndent: 19,
+                        ),
+
+                        // const SizedBox(height: 16),
+                        // const Fatura(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      body: Container(),
+      // bottomNavigationBar: const BottomBarWidget(),
     );
   }
 }

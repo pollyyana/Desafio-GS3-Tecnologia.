@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gs3_tecnologia/app/database/sqlite_adm_connection.dart';
+import 'package:gs3_tecnologia/app/modules/home/home_modulo.dart';
 import 'package:gs3_tecnologia/app/modules/login/auth_module.dart';
 import 'package:gs3_tecnologia/app/modules/splash/splash_page.dart';
 import 'package:provider/provider.dart';
@@ -23,13 +24,16 @@ class _AppWidgetState extends State<AppWidget> {
   @override
   Widget build(BuildContext context) {
     final authModule = AuthModule();
+    final homeModule = HomeModule();
 
     return MultiProvider(
       providers: authModule.providers,
       child: MaterialApp(
         title: 'gs3',
+        initialRoute: '/home',
         routes: {
           ...authModule.routers,
+          ...homeModule.routers,
         },
         home: const SplashPage(),
       ),

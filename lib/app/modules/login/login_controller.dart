@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gs3_tecnologia/app/modules/home/home_page.dart';
-import 'package:gs3_tecnologia/app/services/login_service.dart';
+import 'package:gs3_tecnologia/app/services/login/login_service.dart';
 
 class LoginController extends ChangeNotifier {
   final LoginService _loginService;
@@ -36,7 +36,8 @@ class LoginController extends ChangeNotifier {
     }
   }
 
-  Future<void> login(BuildContext context) async {
+  // se falahar eo buidContext
+  Future<void> login(context) async {
     final cpf = cpfController.text.trim();
     final password = passwordController.text.trim();
 

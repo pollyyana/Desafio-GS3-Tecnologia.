@@ -5,8 +5,8 @@ import 'package:gs3_tecnologia/app/modules/login/login_page.dart';
 import 'package:gs3_tecnologia/app/modules/splash/splash_controller.dart';
 import 'package:gs3_tecnologia/app/repositories/login_repository.dart';
 import 'package:gs3_tecnologia/app/repositories/login_repository_impl.dart';
-import 'package:gs3_tecnologia/app/services/login_service.dart';
-import 'package:gs3_tecnologia/app/services/login_service_impl.dart';
+import 'package:gs3_tecnologia/app/services/login/login_service.dart';
+import 'package:gs3_tecnologia/app/services/login/login_service_impl.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
