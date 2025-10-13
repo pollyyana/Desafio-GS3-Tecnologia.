@@ -43,146 +43,182 @@ class FaturaPage extends StatelessWidget {
           );
         }
 
-        // Datas fixas
+        // Datas fixas de exemplo
         const dataFixaHoje = 'Hoje, 05 Set';
         const dataFixaAnterior = '03 Set';
 
         final faturas = controller.faturas;
 
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Cabeçalho inicial - Hoje
-              Text(
-                dataFixaHoje,
-                style: GoogleFonts.mulish(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF2B66BC),
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Lista de faturas
-              ...List.generate(faturas.length, (index) {
-                final fatura = faturas[index];
-                final iconPath = _getIconForTransaction(fatura.title);
-
-                // Card da fatura
-                final card = Container(
-                  width: double.infinity,
-                  height: 70,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: Colors.grey.shade200,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.06),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Lado esquerdo
-                      Row(
+        return Container(
+          color: Colors.white,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Cabeçalho principal
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(iconPath, width: 38, height: 38),
-                          const SizedBox(width: 14),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                fatura.title,
-                                style: GoogleFonts.mulish(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                DateFormat(
-                                  'dd/MM • HH:mm',
-                                  'pt_BR',
-                                ).format(fatura.date),
-                                style: GoogleFonts.mulish(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      // Lado direito
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            currency.format(fatura.amount),
-                            style: GoogleFonts.mulish(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black,
-                            ),
-                          ),
-                          if (fatura.parcelas.toString().isNotEmpty)
-                            Text(
-                              'em ${fatura.parcelas}',
+                          // Primeira data
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                            child: Text(
+                              dataFixaHoje,
                               style: GoogleFonts.mulish(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey.shade500,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF2B66BC),
                               ),
                             ),
+                          ),
+
+                          // Itens da lista
+                          ...List.generate(faturas.length, (index) {
+                            final fatura = faturas[index];
+                            final iconPath = _getIconForTransaction(
+                              fatura.title,
+                            );
+
+                            if (index == 2) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Divider(
+                                    color: Colors.grey.shade200,
+                                    height: 1,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      0,
+                                      16,
+                                      0,
+                                      8,
+                                    ),
+                                    child: Text(
+                                      dataFixaAnterior,
+                                      style: GoogleFonts.mulish(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF2B66BC),
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Colors.grey.shade200,
+                                    height: 1,
+                                  ),
+                                  _buildListItem(
+                                    fatura,
+                                    iconPath,
+                                    currency,
+                                    context,
+                                  ),
+                                ],
+                              );
+                            }
+
+                            return Column(
+                              children: [
+                                if (index != 0)
+                                  Divider(
+                                    color: Colors.grey.shade200,
+                                    height: 1,
+                                  ),
+                                _buildListItem(
+                                  fatura,
+                                  iconPath,
+                                  currency,
+                                  context,
+                                ),
+                              ],
+                            );
+                          }),
                         ],
                       ),
-                    ],
-                  ),
-                );
-
-                // Insere data “03 Set” após o segundo card
-                if (index == 1) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      card,
-                      const SizedBox(height: 10),
-                      Text(
-                        dataFixaAnterior,
-                        style: GoogleFonts.mulish(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF2B66BC),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  );
-                }
-
-                return card;
-              }),
-            ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildListItem(
+    dynamic fatura,
+    String iconPath,
+    NumberFormat currency,
+    BuildContext context,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Lado esquerdo
+          Row(
+            children: [
+              Image.asset(iconPath, width: 38, height: 38),
+              const SizedBox(width: 14),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    fatura.title,
+                    style: GoogleFonts.mulish(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    DateFormat("dd/MM 'às' HH:mm", 'pt_BR').format(fatura.date),
+                    style: GoogleFonts.mulish(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Lado direito
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                currency.format(fatura.amount),
+                style: GoogleFonts.mulish(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                ),
+              ),
+              if (fatura.parcelas.toString().isNotEmpty)
+                Text(
+                  'em ${fatura.parcelas}x',
+                  style: GoogleFonts.mulish(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

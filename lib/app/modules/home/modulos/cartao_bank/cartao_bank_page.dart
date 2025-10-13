@@ -57,7 +57,7 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 190,
+              height: 160,
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (index) {
@@ -91,14 +91,14 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
   Widget _buildCartao(CartaoModel cartao, int index) {
     const smallLabel = TextStyle(
       color: Colors.white70,
-      fontSize: 12,
+      fontSize: 11,
       fontWeight: FontWeight.w400,
     );
 
     const valueStyle = TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      fontSize: 22,
+      fontSize: 18,
     );
 
     final coresGradiente = [
@@ -109,7 +109,7 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
     final gradientColors = coresGradiente[index % coresGradiente.length];
 
     return Container(
-      height: 190,
+      height: 160,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
@@ -136,11 +136,11 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 110,
-                  height: 75,
+                  width: 100,
+                  height: 65,
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(1),
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -152,7 +152,7 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
                       '•••• ${cartao.digitos}',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 14,
                         letterSpacing: 1.5,
                         fontWeight: FontWeight.w600,
                       ),

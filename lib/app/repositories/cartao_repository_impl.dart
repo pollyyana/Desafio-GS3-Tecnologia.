@@ -1,7 +1,7 @@
 import 'package:gs3_tecnologia/app/database/sqlite_connection_factory.dart';
 import 'package:gs3_tecnologia/app/exceptions/exception.dart';
 import 'package:gs3_tecnologia/app/models/cartao_model.dart';
-import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_repository.dart';
+import 'package:gs3_tecnologia/app/repositories/cartao_repository.dart';
 
 class CartaoRepositoryImpl implements CartaoRepository {
   final SqliteConnectionFactory _connectionFactory;

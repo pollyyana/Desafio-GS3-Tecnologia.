@@ -17,7 +17,7 @@ class MigrationV1 implements Migration {
 
     batch.execute('''
       INSERT INTO users (id, name, cpf, password) VALUES
-      (1, 'Pollyana Banco', '064.084.141-41', '123123'),
+      (1, 'Pollyana', '064.084.141-41', '123123'),
       (2, 'Laura', '109.876.543-21', '123123');
     ''');
 
