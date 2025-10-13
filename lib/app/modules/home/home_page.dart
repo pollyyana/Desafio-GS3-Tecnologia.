@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
+import 'package:gs3_tecnologia/app/core/widgets/todo_list_ui_config.dart';
 import 'package:gs3_tecnologia/app/modules/app_bar_inferior.dart/bottom_bar_widget.dart';
-import 'package:gs3_tecnologia/app/modules/cartao_bank/cartao_bank_widget.dart';
+import 'package:gs3_tecnologia/app/modules/cartao_bank/cartao_bank_page.dart';
 import 'package:gs3_tecnologia/app/modules/cartao_bank/cartao_controller.dart';
 import 'package:gs3_tecnologia/app/modules/cartao_bank/cartao_repositories.dart';
 import 'package:gs3_tecnologia/app/modules/fatura/fatura.dart';
@@ -16,14 +19,19 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final controller = Get.find<HomeController>();
+
   final cartaoController = Get.put(
     CartaoController(CartaoRepository(Dio())),
     permanent: true,
   );
+
   final faturaController = Get.put(
     FaturaController(FaturaRepository(Dio())),
     permanent: true,
   );
+
+  // 🔹 Estado local para controlar se a fatura está visível
+  final RxBool mostrarFatura = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -39,79 +47,118 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      extendBody: true,
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF2B66BC), Colors.white],
+            colors: [Color(0xFF3C6AB2), Colors.white],
             stops: [0.0, 0.5],
           ),
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(17.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AppbarWidget(),
-                const SizedBox(height: 1),
-                const Divider(
-                  color: Colors.white,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF2B66BC), Colors.white],
+              stops: [0.0, 0.5],
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppbarWidget(),
+                  const SizedBox(height: 1),
+                  const Divider(color: Colors.white, endIndent: 19),
+                  const SizedBox(height: 5),
+                  CartaoBankPage(),
+                  const SizedBox(height: 12),
+                  Divider(color: Colors.grey[200], endIndent: 19),
+                  const FavoritosWidget(),
+                  const SizedBox(height: 12),
+                  Divider(color: Colors.grey[200], endIndent: 19),
 
-                Obx(() {
-                  final cartoes = cartaoController.cartoes;
-                  if (cartoes.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+                  // 🔹 Cabeçalho "Últimos lançamentos" com botão
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: Row(
-                      children: cartoes.map((cartao) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: GestureDetector(
-                            onTap: () async {
-                              cartaoController.selecionarCartao(cartao.id);
-                              await faturaController.carregarFatura(cartao.id);
-                            },
-                            child: SizedBox(
-                              width: 300,
-                              child: Obx(() {
-                                final ativo =
-                                    cartaoController.cartaoAtivo.value?.id ==
-                                    cartao.id;
-                                return Opacity(
-                                  opacity: ativo ? 1.0 : 0.5,
-                                  child: CartaoBankWidget(cartao: cartao),
-                                );
-                              }),
-                            ),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Últimos lançamentos',
+                          style: context.mulishBold.copyWith(
+                            fontSize: 18,
+                            color: Colors.black,
                           ),
-                        );
-                      }).toList(),
+                        ),
+                        Obx(() {
+                          return GestureDetector(
+                            onTap: () =>
+                                mostrarFatura.value = !mostrarFatura.value,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.transparent,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    mostrarFatura.value
+                                        ? 'Ocultar'
+                                        : 'Ver todos',
+                                    style: GoogleFonts.mulish(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF2B66BC),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Transform.rotate(
+                                    angle: mostrarFatura.value ? 3.14 : 0,
+                                    child: Image.asset(
+                                      ImageConstants.arrow,
+                                      width: 15,
+                                      height: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
                     ),
-                  );
-                }),
+                  ),
+                  const SizedBox(height: 8),
 
-                const SizedBox(height: 8),
-                Divider(color: Colors.grey[200]),
-                const FavoritosWidget(),
-                const SizedBox(height: 8),
-                Divider(color: Colors.grey[200]),
-                const SizedBox(height: 8),
-                const Fatura(),
-              ],
+                  // 🔹 Só a fatura terá scroll próprio
+                  Obx(
+                    () => mostrarFatura.value
+                        ? Expanded(
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: const Fatura(),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-
       bottomNavigationBar: BottomBarWidget(),
     );
   }

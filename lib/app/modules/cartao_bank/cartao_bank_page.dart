@@ -1,138 +1,77 @@
+// lib/app/modules/cartao_bank/cartao_bank_page.dart
 import 'package:flutter/material.dart';
-import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
-import 'package:gs3_tecnologia/app/models/cartao_model.dart';
+import 'package:get/get.dart';
+import 'package:gs3_tecnologia/app/modules/cartao_bank/cartao_bank_widget.dart';
+import 'package:gs3_tecnologia/app/modules/cartao_bank/cartao_controller.dart';
+import 'package:gs3_tecnologia/app/modules/fatura/fatura_controller.dart';
 import 'package:intl/intl.dart';
 
-class CartaoBankWidget extends StatefulWidget {
-  final CartaoModel cartao;
-  const CartaoBankWidget({super.key, required this.cartao});
+class CartaoBankPage extends StatefulWidget {
+  const CartaoBankPage({super.key});
 
   @override
-  State<CartaoBankWidget> createState() => _CartaoBankWidgetState();
+  State<CartaoBankPage> createState() => _CartaoBankPageState();
 }
 
-class _CartaoBankWidgetState extends State<CartaoBankWidget> {
-  bool _mostrarLimite = true;
+class _CartaoBankPageState extends State<CartaoBankPage> {
+  bool mostrarLimite = true;
 
   @override
   Widget build(BuildContext context) {
+    final cartaoController = Get.find<CartaoController>();
+    final faturaController = Get.find<FaturaController>();
     final currency = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
-    final bool isGreen = widget.cartao.id == 2;
-    final Color backgroundColor = isGreen
-        ? const Color.fromRGBO(0, 81, 83, 1)
-        : ColorsConstants.azul;
-    final Color textColor = Colors.white;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 180,
+          child: Obx(() {
+            final cartoes = cartaoController.cartoes;
+            if (cartoes.isEmpty) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            }
 
-    return Container(
-      width: 300,
-      height: 180,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          //nome e olho
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.cartao.bankName,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _mostrarLimite = !_mostrarLimite;
-                  });
-                  if (widget.cartao.onEyePressed != null) {
-                    widget.cartao.onEyePressed!();
-                  }
-                },
-                child: Image.asset(
-                  _mostrarLimite ? ImageConstants.eyeOn : ImageConstants.eyeOff,
-                  width: 24,
-                  height: 24,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: cartoes.map((cartao) {
+                  final ativo =
+                      cartaoController.cartaoAtivo.value?.id == cartao.id;
 
-          // 🔹 Limite disponível
-          Text(
-            'Limite disponível',
-            style: TextStyle(
-              color: textColor.withValues(alpha: 0.8),
-              fontSize: 13,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            _mostrarLimite
-                ? currency.format(widget.cartao.availableLimit)
-                : '••••••',
-            style: TextStyle(
-              color: textColor,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Spacer(),
-
-          // dia compra
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 88,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '**** ${widget.cartao.lastDigits}',
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'Melhor dia de compra',
-                    style: TextStyle(
-                      color: textColor.withValues(alpha: 0.8),
-                      fontSize: 12,
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.deferToChild,
+                      onTap: () async {
+                        cartaoController.selecionarCartao(cartao.id);
+                        await faturaController.carregarFatura(cartao.id);
+                      },
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 200),
+                        opacity: ativo ? 1.0 : 0.5,
+                        child: CartaoWidgets.buildCartao(
+                          cartao: cartao,
+                          mostrarLimite: mostrarLimite,
+                          currency: currency,
+                          onToggleVisibilidade: () {
+                            setState(() {
+                              mostrarLimite = !mostrarLimite;
+                            });
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${widget.cartao.bestPurchaseDay}',
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
-            ],
-          ),
-        ],
-      ),
+            );
+          }),
+        ),
+      ],
     );
   }
 }

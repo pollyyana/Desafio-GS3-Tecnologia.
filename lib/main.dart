@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'GS3 Tecnologia',
       theme: ThemeData(),
       debugShowCheckedModeBanner: false,
+      // initialRoute: '/home',
       getPages: [
         ...AllModules().routers,
       ],
