@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/utils/constants.dart';
 import 'package:gs3_tecnologia/app/models/cartao_model.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_controller.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_controller.dart';
@@ -13,6 +14,7 @@ class CartaoBankPage extends StatefulWidget {
 
 class _CartaoBankPageState extends State<CartaoBankPage> {
   final PageController _pageController = PageController(viewportFraction: 0.93);
+  bool mostrarLimite = true;
 
   @override
   void initState() {
@@ -25,15 +27,10 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
 
       await cartaoController.fetchCartoes();
 
-      // Seleciona o primeiro cartão e carrega as faturas correspondentes
       if (cartaoController.cartoes.isNotEmpty) {
         final primeiroCartao = cartaoController.cartoes.first;
         cartaoController.selecionarCartao(primeiroCartao);
         faturaController.carregarFaturas(primeiroCartao.id);
-
-        debugPrint(
-          'Cartão inicial selecionado: ${primeiroCartao.name} (id ${primeiroCartao.id})',
-        );
       }
     });
   }
@@ -67,11 +64,6 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
                   final cartaoSelecionado = controller.cartoes[index];
                   controller.selecionarCartao(cartaoSelecionado);
 
-                  debugPrint(
-                    'Cartão selecionado: ${cartaoSelecionado.name} (id ${cartaoSelecionado.id})',
-                  );
-
-                  // Atualiza faturas do cartão selecionado
                   final faturaController = context.read<FaturaController>();
                   faturaController.carregarFaturas(cartaoSelecionado.id);
                 },
@@ -84,7 +76,7 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
                       left: index == 0 ? 6 : 0,
                       right: index == controller.cartoes.length - 1 ? 6 : 10,
                     ),
-                    child: _buildCartao(cartao),
+                    child: _buildCartao(cartao, index),
                   );
                 },
               ),
@@ -96,7 +88,7 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
     );
   }
 
-  Widget _buildCartao(CartaoModel cartao) {
+  Widget _buildCartao(CartaoModel cartao, int index) {
     const smallLabel = TextStyle(
       color: Colors.white70,
       fontSize: 12,
@@ -109,16 +101,21 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
       fontSize: 22,
     );
 
-    const iconColor = Color(0xFF90C1FF);
+    final coresGradiente = [
+      const [Color(0xFF2B66BC), Color(0xFF132D55)], // azul
+      const [Color(0xFF005153), Color(0xFF005153)], // verde
+    ];
+
+    final gradientColors = coresGradiente[index % coresGradiente.length];
 
     return Container(
       height: 190,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF2055B8), Color(0xFF143F9A)],
+          colors: gradientColors,
         ),
         boxShadow: [
           BoxShadow(
@@ -172,10 +169,20 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
                   ],
                 ),
                 const Spacer(),
-                const Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: iconColor,
-                  size: 22,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      mostrarLimite = !mostrarLimite;
+                    });
+                  },
+                  child: Image.asset(
+                    mostrarLimite
+                        ? ImageConstants.eyeOn
+                        : ImageConstants.eyeOff,
+                    width: 22,
+                    height: 22,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -196,7 +203,9 @@ class _CartaoBankPageState extends State<CartaoBankPage> {
                     SizedBox(
                       height: 25,
                       child: Text(
-                        'R\$ ${cartao.limitValue.toStringAsFixed(2).replaceAll('.', ',')}',
+                        mostrarLimite
+                            ? 'R\$ ${cartao.limitValue.toStringAsFixed(2).replaceAll('.', ',')}'
+                            : '••••••',
                         style: valueStyle,
                       ),
                     ),

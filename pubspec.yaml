@@ -43,7 +43,6 @@ dependencies:
   provider: ^6.1.5+1
   synchronized: ^3.4.0
   google_fonts: ^6.3.2
-  smooth_page_indicator: ^1.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
