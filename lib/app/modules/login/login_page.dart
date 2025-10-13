@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/theme/todo_list_ui_config.dart';
 import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -41,12 +42,19 @@ class LoginPage extends StatelessWidget {
               children: [
                 const Text(
                   'Seja bem-vindo(a)!',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
                   'Digite sua senha do aplicativo.',
-                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textGrey,
+                  ),
                 ),
                 const SizedBox(height: 24),
 
@@ -57,8 +65,17 @@ class LoginPage extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'CPF',
                     hintText: '000.000.000-00',
+                    labelStyle: const TextStyle(color: AppColors.textGrey),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(24),
+                    ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(24)),
+                      borderSide: BorderSide(color: AppColors.borderGrey),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(24)),
+                      borderSide: BorderSide(color: AppColors.borderGrey),
                     ),
                   ),
                   validator: Validatorless.multiple([
@@ -68,7 +85,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // SENHA (sem perder foco!)
+                // SENHA
                 Selector<LoginController, bool>(
                   selector: (_, c) => c.obscurePassword,
                   builder: (_, obscurePassword, __) {
@@ -79,16 +96,23 @@ class LoginPage extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: 'Senha',
                         hintText: 'Senha',
+                        labelStyle: const TextStyle(color: AppColors.textGrey),
                         suffixIcon: IconButton(
                           icon: Icon(
                             obscurePassword
                                 ? Icons.visibility_off_outlined
                                 : Icons.visibility_outlined,
+                            color: AppColors.borderGrey,
                           ),
                           onPressed: controller.togglePasswordVisibility,
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                          borderSide: BorderSide(color: AppColors.borderGrey),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                          borderSide: BorderSide(color: AppColors.borderGrey),
                         ),
                       ),
                       validator: Validatorless.multiple([
@@ -121,8 +145,8 @@ class LoginPage extends StatelessWidget {
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isFormValid
-                              ? Colors.blue
-                              : Colors.grey,
+                              ? AppColors.primary
+                              : AppColors.borderGrey,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -130,7 +154,11 @@ class LoginPage extends StatelessWidget {
                         ),
                         child: const Text(
                           'Confirmar',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/theme/todo_list_ui_config.dart';
 import 'package:gs3_tecnologia/app/database/sqlite_adm_connection.dart';
 import 'package:gs3_tecnologia/app/modules/home/home_modulo.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_module.dart';
@@ -44,12 +45,10 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         ...faturaModule.bindings,
       ],
       child: MaterialApp(
-        title: 'gs3',
-        theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          useMaterial3: true,
-        ),
-        initialRoute: '/home',
+        title: 'GS3 Tecnologia',
+        debugShowCheckedModeBanner: false,
+        theme: TodoListUiConfig.theme,
+        // initialRoute: '/home',
         routes: {
           ...authModule.routers,
           ...homeModule.routers,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/theme/todo_list_ui_config.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/appbarinferior/bottom_bar_widget.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/cartao_bank/cartao_bank_page.dart';
 import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_page.dart';
@@ -13,8 +14,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
-      // ✅ Barra inferior fica fixa, não sobrepõe o conteúdo
       bottomNavigationBar: const BottomBarWidget(),
 
       body: Container(
@@ -22,7 +21,7 @@ class HomePage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF2B66BC), Colors.white],
+            colors: [Color(0xFF3C6AB2), Colors.white],
             stops: [0.0, 0.5],
           ),
         ),
@@ -50,11 +49,11 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: const Text(
+                child: Text(
                   'Últimos lançamentos',
-                  style: TextStyle(
+                  style: context.mulishBold.copyWith(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
               ),

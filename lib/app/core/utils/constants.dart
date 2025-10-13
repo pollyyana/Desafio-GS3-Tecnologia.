@@ -37,7 +37,7 @@ class ImageConstants {
   static const String eyeOff = 'assets/images/eyeof.png';
   static const String eyeOn = 'assets/images/eye.png';
   static const String sms = 'assets/images/sms.png';
-  static const String vip = 'assets/images/vipe.png';
+  static const String vip = 'assets/images/vip.png';
   static const String seguro = 'assets/images/seguro.png';
   static const String virtual = 'assets/images/virtual.png';
   static const String adicional = 'assets/images/adicional.png';

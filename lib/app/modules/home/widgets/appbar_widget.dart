@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gs3_tecnologia/app/core/utils/constants.dart';
 
 class AppbarWidget extends StatelessWidget {
@@ -18,7 +19,13 @@ class AppbarWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            /// Ícone do menu
             GestureDetector(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Menu clicado!')),
+                );
+              },
               child: Image.asset(
                 ImageConstants.menu,
                 width: 22,
@@ -26,10 +33,12 @@ class AppbarWidget extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
+
+            /// Texto de saudação
             Text.rich(
               TextSpan(
                 text: 'Olá, ',
-                style: const TextStyle(
+                style: GoogleFonts.mulish(
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
@@ -37,7 +46,7 @@ class AppbarWidget extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: usuarioNome,
-                    style: const TextStyle(
+                    style: GoogleFonts.mulish(
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -45,6 +54,8 @@ class AppbarWidget extends StatelessWidget {
                 ],
               ),
             ),
+
+            /// Ícones de chat e notificações
             Row(
               children: [
                 GestureDetector(

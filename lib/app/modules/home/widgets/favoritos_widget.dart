@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gs3_tecnologia/app/core/utils/constants.dart';
 
 class FavoritosWidget extends StatelessWidget {
@@ -17,11 +18,10 @@ class FavoritosWidget extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           label,
-          style: TextStyle(
-            // fontFamily: FontConstants.mulish,
-            fontSize: 12,
+          style: GoogleFonts.mulish(
+            fontSize: 10, // tamanho ajustado
+            fontWeight: FontWeight.w400, // Regular
             color: Colors.black87,
-            fontWeight: FontWeight.w400,
           ),
         ),
       ],
@@ -33,14 +33,14 @@ class FavoritosWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        /// Cabeçalho
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Meus favoritos',
-              style: TextStyle(
-                // fontFamily: FontConstants.mulish,
-                fontWeight: FontWeight.w700,
+              style: GoogleFonts.mulish(
+                fontWeight: FontWeight.w700, // Bold 700
                 fontSize: 16,
                 color: Colors.black,
               ),
@@ -49,10 +49,11 @@ class FavoritosWidget extends StatelessWidget {
               onTap: () => debugPrint('Personalizar clicado'),
               child: Row(
                 children: [
-                  const Text(
+                  Text(
                     'Personalizar',
-                    style: TextStyle(
+                    style: GoogleFonts.mulish(
                       fontSize: 12,
+                      fontWeight: FontWeight.w400,
                       color: Colors.blueGrey,
                     ),
                   ),
@@ -70,6 +71,7 @@ class FavoritosWidget extends StatelessWidget {
 
         const SizedBox(height: 16),
 
+        /// Lista horizontal
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 12),
