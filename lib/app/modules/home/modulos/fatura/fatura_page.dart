@@ -46,7 +46,6 @@ class FaturaPage extends StatelessWidget {
         // Datas fixas de exemplo
         const dataFixaHoje = 'Hoje, 05 Set';
         const dataFixaAnterior = '03 Set';
-
         final faturas = controller.faturas;
 
         return Container(
@@ -57,94 +56,55 @@ class FaturaPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Cabeçalho principal
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Primeira data
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                            child: Text(
-                              dataFixaHoje,
-                              style: GoogleFonts.mulish(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: const Color(0xFF2B66BC),
-                              ),
+                // Primeira data
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    dataFixaHoje,
+                    style: GoogleFonts.mulish(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF2B66BC),
+                    ),
+                  ),
+                ),
+
+                // Lista de faturas com divisores
+                ...List.generate(faturas.length, (index) {
+                  final fatura = faturas[index];
+                  final iconPath = _getIconForTransaction(fatura.title);
+
+                  // Inserir a segunda data depois do segundo item
+                  if (index == 2) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Divider(color: Colors.grey.shade200, height: 1),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                          child: Text(
+                            dataFixaAnterior,
+                            style: GoogleFonts.mulish(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF2B66BC),
                             ),
                           ),
+                        ),
+                        Divider(color: Colors.grey.shade200, height: 1),
+                        _buildListItem(fatura, iconPath, currency),
+                      ],
+                    );
+                  }
 
-                          // Itens da lista
-                          ...List.generate(faturas.length, (index) {
-                            final fatura = faturas[index];
-                            final iconPath = _getIconForTransaction(
-                              fatura.title,
-                            );
-
-                            if (index == 2) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Divider(
-                                    color: Colors.grey.shade200,
-                                    height: 1,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      0,
-                                      16,
-                                      0,
-                                      8,
-                                    ),
-                                    child: Text(
-                                      dataFixaAnterior,
-                                      style: GoogleFonts.mulish(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF2B66BC),
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(
-                                    color: Colors.grey.shade200,
-                                    height: 1,
-                                  ),
-                                  _buildListItem(
-                                    fatura,
-                                    iconPath,
-                                    currency,
-                                    context,
-                                  ),
-                                ],
-                              );
-                            }
-
-                            return Column(
-                              children: [
-                                if (index != 0)
-                                  Divider(
-                                    color: Colors.grey.shade200,
-                                    height: 1,
-                                  ),
-                                _buildListItem(
-                                  fatura,
-                                  iconPath,
-                                  currency,
-                                  context,
-                                ),
-                              ],
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  return Column(
+                    children: [
+                      if (index != 0)
+                        Divider(color: Colors.grey.shade200, height: 1),
+                      _buildListItem(fatura, iconPath, currency),
+                    ],
+                  );
+                }),
               ],
             ),
           ),
@@ -157,7 +117,6 @@ class FaturaPage extends StatelessWidget {
     dynamic fatura,
     String iconPath,
     NumberFormat currency,
-    BuildContext context,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
