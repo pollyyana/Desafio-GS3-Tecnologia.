@@ -82,7 +82,7 @@ class ColorsConstants {
 //   static const eyeof = 'assets/images/eyeof.png';
 //   static const eye = 'assets/images/eye.png';
 //   static const sms = 'assets/images/sms.png';
-//   static const vip = 'assets/images/vipe.png';
+//   static const vip = 'assets/images/vip.png';
 //   static const seguro = 'assets/images/seguro.png';
 //   static const virtual = 'assets/images/virtual.png';
 //   static const adicional = 'assets/images/adicional.png';
