@@ -2,33 +2,37 @@
 
 // import 'bottom_bar_widget.dart';
 
+// /// Enum que representa as páginas
+// enum BottomPageType { home, fatura, cartao, shop }
+
+// /// Página simples de placeholder para cada botão
 // class BottomBarPage extends StatelessWidget {
-//   final BottomBarPage selectedPage;
+//   final BottomPageType selectedPage;
 
 //   const BottomBarPage({super.key, required this.selectedPage});
 
 //   String get _pageTitle {
 //     switch (selectedPage) {
-//       case BottomBarPage.home:
+//       case BottomPageType.home:
 //         return 'Página Inicial';
-//       case BottomBarPage.fatura:
+//       case BottomPageType.fatura:
 //         return 'Fatura';
-//       case BottomBarPage.cartao:
+//       case BottomPageType.cartao:
 //         return 'Cartão';
-//       case BottomBarPage.shop:
+//       case BottomPageType.shop:
 //         return 'Shop';
 //     }
 //   }
 
 //   IconData get _pageIcon {
 //     switch (selectedPage) {
-//       case BottomBarPage.home:
+//       case BottomPageType.home:
 //         return Icons.home;
-//       case BottomBarPage.fatura:
+//       case BottomPageType.fatura:
 //         return Icons.receipt_long;
-//       case BottomBarPage.cartao:
+//       case BottomPageType.cartao:
 //         return Icons.credit_card;
-//       case BottomBarPage.shop:
+//       case BottomPageType.shop:
 //         return Icons.shopping_bag;
 //     }
 //   }
@@ -50,7 +54,10 @@
 //           ],
 //         ),
 //       ),
-//       bottomNavigationBar: BottomBarWidget(),
+//       bottomNavigationBar: BottomBarWidget(
+//         currentIndex: null,
+//         onItemSelected: (_) {},
+//       ),
 //     );
 //   }
 // }

@@ -1,134 +1,156 @@
-// import 'package:flutter/material.dart';
-// import 'package:gs3_tecnologia/app/core/utils/constants.dart';
-// import 'package:gs3_tecnologia/app/core/widgets/constants.dart';
-// import 'package:gs3_tecnologia/app/modules/app_bar_inferior.dart/bottom_bar_main_page.dart';
+import 'package:flutter/material.dart';
+import 'package:gs3_tecnologia/app/core/utils/constants.dart';
 
-// enum BottomBarPage { home, fatura, cartao, shop }
+class BottomBarWidget extends StatefulWidget {
+  const BottomBarWidget({super.key});
 
-// class BottomBarWidget extends StatefulWidget {
-//   const BottomBarWidget({super.key});
+  @override
+  State<BottomBarWidget> createState() => _BottomBarWidgetState();
+}
 
-//   @override
-//   State<BottomBarWidget> createState() => _BottomBarWidgetState();
-// }
+class _BottomBarWidgetState extends State<BottomBarWidget> {
+  int? _selectedIndex;
 
-// class _BottomBarWidgetState extends State<BottomBarWidget> {
-//   final ValueNotifier<BottomBarPage> selectedPage = ValueNotifier(
-//     BottomBarPage.home,
-//   );
+  final _items = [
+    _BottomItem(label: 'Home', icon: ImageConstants.home),
+    _BottomItem(label: 'Fatura', icon: ImageConstants.fatura),
+    _BottomItem(label: 'Cartão', icon: ImageConstants.cartao),
+    _BottomItem(label: 'Shop', icon: ImageConstants.shope),
+  ];
 
-//   final List<_BottomItem> items = [
-//     _BottomItem(
-//       label: 'Home',
-//       icon: ImageConstants.home,
-//       page: BottomBarPage.home,
-//     ),
-//     _BottomItem(
-//       label: 'Fatura',
-//       icon: ImageConstants.fatura,
-//       page: BottomBarPage.fatura,
-//     ),
-//     _BottomItem(
-//       label: 'Cartão',
-//       icon: ImageConstants.cartao,
-//       page: BottomBarPage.cartao,
-//     ),
-//     _BottomItem(
-//       label: 'Shop',
-//       icon: ImageConstants.shope,
-//       page: BottomBarPage.shop,
-//     ),
-//   ];
+  void _onTap(int index) {
+    setState(() {
+      // Se clicar de novo → fecha
+      _selectedIndex = (_selectedIndex == index) ? null : index;
+    });
+  }
 
-//   @override
-//   void dispose() {
-//     selectedPage.dispose();
-//     super.dispose();
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        // --- Página branca sobreposta (mas Home continua visível por baixo) ---
+        if (_selectedIndex != null)
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => setState(() => _selectedIndex = null),
+              child: Container(
+                color: Colors.white.withOpacity(0.96),
+                child: Center(
+                  child: _EmptyPage(index: _selectedIndex!),
+                ),
+              ),
+            ),
+          ),
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return ValueListenableBuilder<BottomBarPage>(
-//       valueListenable: selectedPage,
-//       builder: (context, page, _) {
-//         return Container(
-//           width: double.infinity,
-//           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 32),
-//           decoration: BoxDecoration(
-//             color: Colors.white,
-//             borderRadius: const BorderRadius.only(
-//               topLeft: Radius.circular(30),
-//               topRight: Radius.circular(30),
-//             ),
-//             boxShadow: [
-//               BoxShadow(
-//                 color: Colors.black.withOpacity(0.1),
-//                 blurRadius: 10,
-//                 offset: const Offset(0, -2),
-//               ),
-//             ],
-//           ),
-//           child: SafeArea(
-//             top: false,
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//               children: items.map((item) {
-//                 final selected = page == item.page;
+        // --- Barra inferior ---
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 28),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: SafeArea(
+              top: false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(_items.length, (index) {
+                  final item = _items[index];
+                  final selected = index == _selectedIndex;
 
-//                 return GestureDetector(
-//                   onTap: () {
-//                     selectedPage.value = item.page;
-//                     Navigator.push(
-//                       context,
-//                       PageRouteBuilder(
-//                         pageBuilder: (_, __, ___) =>
-//                             BottomBarPage(selectedPage: selectedPage.value),
-//                         transitionsBuilder: (_, animation, __, child) =>
-//                             FadeTransition(
-//                               opacity: animation,
-//                               child: child,
-//                             ),
-//                       ),
-//                     );
-//                   },
-//                   child: Column(
-//                     mainAxisSize: MainAxisSize.min,
-//                     children: [
-//                       Image.asset(
-//                         item.icon,
-//                         width: 26,
-//                         height: 26,
-//                         color: selected ? const Color(0xFF2B66BC) : Colors.grey,
-//                       ),
-//                       const SizedBox(height: 4),
-//                       Text(
-//                         item.label,
-//                         style: TextStyle(
-//                           color: selected
-//                               ? const Color(0xFF2B66BC)
-//                               : Colors.grey.shade600,
-//                           fontWeight: selected
-//                               ? FontWeight.bold
-//                               : FontWeight.w400,
-//                           fontSize: 12,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 );
-//               }).toList(),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
+                  return GestureDetector(
+                    onTap: () => _onTap(index),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          item.icon,
+                          width: 26,
+                          height: 26,
+                          color: selected
+                              ? const Color(0xFF2B66BC)
+                              : Colors.grey,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          item.label,
+                          style: TextStyle(
+                            color: selected
+                                ? const Color(0xFF2B66BC)
+                                : Colors.grey.shade600,
+                            fontWeight: selected
+                                ? FontWeight.bold
+                                : FontWeight.w400,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
-// class _BottomItem {
-//   final String label;
-//   final String icon;
-//   final BottomBarPage page;
+/// --- Página simples “vazia” ---
+class _EmptyPage extends StatelessWidget {
+  final int index;
 
-//   _BottomItem({required this.label, required this.icon, required this.page});
-// }
+  const _EmptyPage({required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    const titles = ['Home', 'Fatura', 'Cartão', 'Shop'];
+    const icons = [
+      Icons.home,
+      Icons.receipt_long,
+      Icons.credit_card,
+      Icons.shopping_bag,
+    ];
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icons[index], size: 80, color: const Color(0xFF2B66BC)),
+        const SizedBox(height: 16),
+        Text(
+          'Página ${titles[index]}',
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2B66BC),
+          ),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Clique novamente para fechar',
+          style: TextStyle(color: Colors.grey),
+        ),
+      ],
+    );
+  }
+}
+
+class _BottomItem {
+  final String label;
+  final String icon;
+  _BottomItem({required this.label, required this.icon});
+}
