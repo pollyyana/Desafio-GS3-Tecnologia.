@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
