@@ -49,7 +49,7 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
           primarySwatch: Colors.deepPurple,
           useMaterial3: true,
         ),
-        // initialRoute: '/home',
+        initialRoute: '/home',
         routes: {
           ...authModule.routers,
           ...homeModule.routers,

@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:gs3_tecnologia/app/core/utils/constants.dart';
 
 class AppbarWidget extends StatelessWidget {
-  const AppbarWidget({super.key});
+  final String usuarioNome;
+
+  const AppbarWidget({
+    super.key,
+    required this.usuarioNome,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +26,18 @@ class AppbarWidget extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const Text.rich(
+            Text.rich(
               TextSpan(
                 text: 'Olá, ',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
                 ),
                 children: [
                   TextSpan(
-                    text: 'Cliente',
-                    style: TextStyle(
+                    text: usuarioNome,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),

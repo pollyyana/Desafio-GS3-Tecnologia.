@@ -14,6 +14,9 @@ class LoginController extends ChangeNotifier {
   bool _isFormValid = false;
   bool get isFormValid => _isFormValid;
 
+  String? _usuarioNome;
+  String? get usuarioNome => _usuarioNome;
+
   LoginController({required LoginService loginService})
     : _loginService = loginService {
     cpfController.addListener(_validateForm);
@@ -36,24 +39,53 @@ class LoginController extends ChangeNotifier {
     }
   }
 
-  // se falahar eo buidContext
-  Future<void> login(context) async {
+  Future<void> login(BuildContext context) async {
+    FocusScope.of(context).unfocus(); // fecha o teclado
+
     final cpf = cpfController.text.trim();
     final password = passwordController.text.trim();
 
-    final user = await _loginService.login(cpf, password);
+    try {
+      final user = await _loginService.login(cpf, password);
 
-    if (user != null) {
-      // login bem-sucedido: navega para HomePage
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomePage()),
-      );
-    } else {
-      // login falhou: exibe mensagem
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('CPF ou senha incorretos')),
-      );
+      if (!context.mounted) return;
+
+      if (user != null) {
+        _usuarioNome = user.name;
+        notifyListeners();
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => HomePage(
+              usuarioNome: _usuarioNome,
+            ),
+          ),
+        );
+      } else {
+        _mostrarMensagem(context, 'CPF ou senha incorretos.');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        _mostrarMensagem(context, e.toString().replaceAll('Exception: ', ''));
+      }
     }
+  }
+
+  /// Método helper para exibir mensagens com segurança
+  void _mostrarMensagem(BuildContext context, String mensagem) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            mensagem,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(12),
+        ),
+      );
   }
 
   @override

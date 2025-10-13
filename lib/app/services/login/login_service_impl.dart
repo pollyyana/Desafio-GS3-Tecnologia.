@@ -8,6 +8,11 @@ import 'package:gs3_tecnologia/app/services/login/login_service.dart';
 class LoginServiceImpl implements LoginService {
   final LoginRepository _repository;
 
+  // 👇 adiciona o usuário atual
+  UserModel? _currentUser;
+  @override
+  UserModel? get currentUser => _currentUser;
+
   LoginServiceImpl({required LoginRepository repository})
     : _repository = repository;
 
@@ -29,6 +34,10 @@ class LoginServiceImpl implements LoginService {
       }
 
       log('Login bem-sucedido para ${user.name}', name: 'LoginServiceImpl');
+
+      // 👇 salva o usuário logado
+      _currentUser = user;
+
       return user;
     } on AppException {
       rethrow;

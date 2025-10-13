@@ -6,72 +6,67 @@ import 'package:gs3_tecnologia/app/modules/home/widgets/appbar_widget.dart';
 import 'package:gs3_tecnologia/app/modules/home/widgets/favoritos_widget.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final String? usuarioNome;
+  const HomePage({super.key, this.usuarioNome});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          /// --- CONTEÚDO PRINCIPAL ---
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF2B66BC), Colors.white],
-                stops: [0.0, 0.5],
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Column(
-                children: [
-                  const AppbarWidget(),
-                  const Divider(
-                    color: Colors.white,
-                    thickness: 1,
-                    endIndent: 19,
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 10),
-                          const CartaoBankPage(),
-                          const SizedBox(height: 5),
-                          const Divider(color: Colors.white, endIndent: 19),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: FavoritosWidget(),
-                          ),
-                          const SizedBox(height: 10),
-                          const Divider(
-                            color: Colors.black12,
-                            thickness: 0.6,
-                            endIndent: 19,
-                          ),
-                          const SizedBox(height: 10),
-                          const FaturaPage(),
-                          const SizedBox(height: 30),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
 
-          /// --- BARRA INFERIOR FLUTUANTE + PÁGINAS SOBREPOSTAS ---
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: BottomBarWidget(),
+      // ✅ Barra inferior fica fixa, não sobrepõe o conteúdo
+      bottomNavigationBar: const BottomBarWidget(),
+
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF2B66BC), Colors.white],
+            stops: [0.0, 0.5],
           ),
-        ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppbarWidget(usuarioNome: usuarioNome ?? 'Cliente'),
+              const Divider(color: Colors.white, thickness: 1, endIndent: 19),
+              const SizedBox(height: 10),
+              const CartaoBankPage(),
+              const SizedBox(height: 5),
+              const Divider(color: Colors.white, endIndent: 19),
+              const Padding(
+                padding: EdgeInsets.only(left: 6),
+                child: FavoritosWidget(),
+              ),
+              const SizedBox(height: 10),
+              const Divider(
+                color: Colors.black12,
+                thickness: 0.6,
+                endIndent: 19,
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: const Text(
+                  'Últimos lançamentos',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: const FaturaPage(),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

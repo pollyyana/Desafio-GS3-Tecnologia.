@@ -4,16 +4,8 @@ import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_controller
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class FaturaPage extends StatefulWidget {
+class FaturaPage extends StatelessWidget {
   const FaturaPage({super.key});
-
-  @override
-  State<FaturaPage> createState() => _FaturaPageState();
-}
-
-class _FaturaPageState extends State<FaturaPage>
-    with SingleTickerProviderStateMixin {
-  bool mostrarTodas = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,87 +36,42 @@ class _FaturaPageState extends State<FaturaPage>
           );
         }
 
-        // Mostra 4 se estiver recolhido, todas se estiver expandido
-        final faturas = mostrarTodas
-            ? controller.faturas
-            : controller.faturas.take(4).toList();
+        const dataFixa = 'Hoje, 05 Set';
+        final faturas = controller.faturas;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Cabeçalho: "Últimos lançamentos" + "Ver todos"
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Últimos lançamentos',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        mostrarTodas = !mostrarTodas;
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          mostrarTodas ? 'Ver menos' : 'Ver todos',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        AnimatedRotation(
-                          turns: mostrarTodas ? 0.5 : 0,
-                          duration: const Duration(milliseconds: 300),
-                          child: Image.asset(
-                            ImageConstants.arrowRight,
-                            width: 14,
-                            height: 14,
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                dataFixa,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2B66BC),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            // Lista animada
-            AnimatedSize(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.easeInOut,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: faturas.length,
-                itemBuilder: (context, index) {
+              Column(
+                children: List.generate(faturas.length, (index) {
                   final fatura = faturas[index];
                   final iconPath = _getIconForTransaction(fatura.title);
 
                   return Container(
                     width: double.infinity,
                     height: 70,
-                    margin: const EdgeInsets.only(
-                      bottom: 10,
-                      left: 8,
-                      right: 8,
-                    ),
+                    margin: const EdgeInsets.only(bottom: 10),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.grey.shade200, width: 1),
+                      border: Border.all(
+                        color: Colors.grey.shade200,
+                        width: 1,
+                      ),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.06),
@@ -136,7 +83,6 @@ class _FaturaPageState extends State<FaturaPage>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Ícone + título + data
                         Row(
                           children: [
                             Image.asset(iconPath, width: 38, height: 38),
@@ -168,7 +114,6 @@ class _FaturaPageState extends State<FaturaPage>
                           ],
                         ),
 
-                        // Valor e parcelas
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -193,10 +138,10 @@ class _FaturaPageState extends State<FaturaPage>
                       ],
                     ),
                   );
-                },
+                }),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

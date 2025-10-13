@@ -43,6 +43,7 @@ class ImageConstants {
   static const String adicional = 'assets/images/adicional.png';
   static const String grid = 'assets/images/grid.png';
   static const String arrowRight = 'assets/images/Vector.png';
+  static const String homi = 'assets/images/Homi.png';
 }
 
 class ColorsConstants {
