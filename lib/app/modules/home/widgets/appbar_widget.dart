@@ -59,7 +59,6 @@ class AppbarWidget extends StatelessWidget {
               ),
             ),
 
-            /// Ícones de chat e notificações
             Row(
               children: [
                 GestureDetector(
@@ -98,7 +97,6 @@ class AppbarWidget extends StatelessWidget {
   }
 }
 
-/// 🔒 Diálogo encapsulado de logout
 class _LogoutDialog extends StatelessWidget {
   const _LogoutDialog();
 
