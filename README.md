@@ -58,6 +58,8 @@ A branch `master` utiliza o **JSON Server** para simular um backend REST.
 O servidor estará rodando em `http://localhost:8080/users`.
 Adicionar o ip da maquina na classe ApiClient baseUrl = 'http://000.000.15.6:8080';
 
+**Acesso: cpf 06408414141  senha 123123**
+
 ---
 
 ### Branch (provider) - Versão Atual (Principal)
@@ -71,6 +73,8 @@ A atualização de faturas e lançamentos na Home ocorre **automaticamente** ao 
 - **Provider** — Gerenciamento de estado e Injeção de Dependência.
 - **SQLite (sqflite)** — Banco de dados local para persistência.
 - **Validatorless** — Validações de formulários.
+  
+**acesso: cpf 064.084.141-41  senha 123123**
 
 ---
 
