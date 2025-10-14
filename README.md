@@ -56,7 +56,8 @@ A branch `master` utiliza o **JSON Server** para simular um backend REST.
     jrs run
     ```
 O servidor estará rodando em `http://localhost:8080/users`.
-Adicionar o ip da maquina na classe ApiClient baseUrl = 'http://000.000.15.6:8080';
+
+*Adicionar o ip da maquina na classe ApiClient baseUrl = 'http://000.000.15.6:8080';*
 
 **Acesso: cpf 06408414141  senha 123123**
 
