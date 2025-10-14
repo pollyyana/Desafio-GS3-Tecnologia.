@@ -52,13 +52,13 @@ class FaturaPage extends StatelessWidget {
           color: Colors.white,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Primeira data
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: Text(
                     dataFixaHoje,
                     style: GoogleFonts.mulish(
@@ -69,19 +69,23 @@ class FaturaPage extends StatelessWidget {
                   ),
                 ),
 
-                // Lista de faturas com divisores
+                // Lista de faturas
                 ...List.generate(faturas.length, (index) {
                   final fatura = faturas[index];
                   final iconPath = _getIconForTransaction(fatura.title);
 
-                  // Inserir a segunda data depois do segundo item
+                  // Insere nova data após o segundo item
                   if (index == 2) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Divider(color: Colors.grey.shade200, height: 1),
+                        const Divider(
+                          height: 20,
+                          thickness: 0.8,
+                          color: Color(0xFFE0E0E0),
+                        ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                          padding: const EdgeInsets.only(bottom: 15, top: 4),
                           child: Text(
                             dataFixaAnterior,
                             style: GoogleFonts.mulish(
@@ -91,7 +95,11 @@ class FaturaPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Divider(color: Colors.grey.shade200, height: 1),
+                        const Divider(
+                          height: 16,
+                          thickness: 0.6,
+                          color: Color(0xFFE0E0E0),
+                        ),
                         _buildListItem(fatura, iconPath, currency),
                       ],
                     );
@@ -100,7 +108,11 @@ class FaturaPage extends StatelessWidget {
                   return Column(
                     children: [
                       if (index != 0)
-                        Divider(color: Colors.grey.shade200, height: 1),
+                        const Divider(
+                          height: 18,
+                          thickness: 0.6,
+                          color: Color(0xFFE0E0E0),
+                        ),
                       _buildListItem(fatura, iconPath, currency),
                     ],
                   );
@@ -119,12 +131,13 @@ class FaturaPage extends StatelessWidget {
     NumberFormat currency,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Lado esquerdo
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(iconPath, width: 38, height: 38),
               const SizedBox(width: 14),
@@ -134,16 +147,16 @@ class FaturaPage extends StatelessWidget {
                   Text(
                     fatura.title,
                     style: GoogleFonts.mulish(
-                      fontSize: 14,
+                      fontSize: 14.5,
                       fontWeight: FontWeight.w700,
                       color: Colors.black87,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
                     DateFormat("dd/MM 'às' HH:mm", 'pt_BR').format(fatura.date),
                     style: GoogleFonts.mulish(
-                      fontSize: 13,
+                      fontSize: 12.8,
                       fontWeight: FontWeight.w400,
                       color: Colors.grey.shade600,
                     ),
@@ -160,18 +173,21 @@ class FaturaPage extends StatelessWidget {
               Text(
                 currency.format(fatura.amount),
                 style: GoogleFonts.mulish(
-                  fontSize: 14,
+                  fontSize: 14.5,
                   fontWeight: FontWeight.w700,
                   color: Colors.black,
                 ),
               ),
               if (fatura.parcelas.toString().isNotEmpty)
-                Text(
-                  'em ${fatura.parcelas}x',
-                  style: GoogleFonts.mulish(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade500,
+                Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(
+                    'em ${fatura.parcelas}x',
+                    style: GoogleFonts.mulish(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade500,
+                    ),
                   ),
                 ),
             ],

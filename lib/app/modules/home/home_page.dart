@@ -8,9 +8,16 @@ import 'package:gs3_tecnologia/app/modules/home/modulos/fatura/fatura_page.dart'
 import 'package:gs3_tecnologia/app/modules/home/widgets/appbar_widget.dart';
 import 'package:gs3_tecnologia/app/modules/home/widgets/favoritos_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String? usuarioNome;
   const HomePage({super.key, this.usuarioNome});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool mostrarFatura = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppbarWidget(usuarioNome: usuarioNome ?? 'Cliente'),
+              AppbarWidget(usuarioNome: widget.usuarioNome ?? 'Cliente'),
               const Divider(color: Colors.white, thickness: 1, endIndent: 19),
               const SizedBox(height: 10),
               const CartaoBankPage(),
@@ -48,8 +55,6 @@ class HomePage extends StatelessWidget {
                 endIndent: 19,
               ),
               const SizedBox(height: 10),
-
-              // Cabeçalho "Últimos lançamentos" com "Ver todos" e seta
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
@@ -62,35 +67,56 @@ class HomePage extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          'Ver todos',
-                          style: GoogleFonts.mulish(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF2B66BC),
-                          ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          mostrarFatura = !mostrarFatura;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
                         ),
-                        const SizedBox(width: 6),
-                        Image.asset(
-                          ImageConstants.arrowRight,
-                          width: 14,
-                          height: 14,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.transparent,
                         ),
-                      ],
+                        child: Row(
+                          children: [
+                            Text(
+                              mostrarFatura ? 'Ocultar' : 'Ver todos',
+                              style: GoogleFonts.mulish(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF2B66BC),
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            AnimatedRotation(
+                              turns: mostrarFatura ? 0.5 : 0,
+                              duration: const Duration(milliseconds: 300),
+                              child: Image.asset(
+                                ImageConstants.arrowRight,
+                                width: 15,
+                                height: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 10),
-
               Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: const FaturaPage(),
-                ),
+                child: mostrarFatura
+                    ? SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: const FaturaPage(),
+                      )
+                    : const SizedBox.shrink(),
               ),
             ],
           ),

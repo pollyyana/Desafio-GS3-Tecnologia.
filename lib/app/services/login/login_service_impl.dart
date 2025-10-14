@@ -8,7 +8,7 @@ import 'package:gs3_tecnologia/app/services/login/login_service.dart';
 class LoginServiceImpl implements LoginService {
   final LoginRepository _repository;
 
-  // 👇 adiciona o usuário atual
+  // Usuário logado atualmente
   UserModel? _currentUser;
   @override
   UserModel? get currentUser => _currentUser;
@@ -35,7 +35,7 @@ class LoginServiceImpl implements LoginService {
 
       log('Login bem-sucedido para ${user.name}', name: 'LoginServiceImpl');
 
-      // 👇 salva o usuário logado
+      // Salva o usuário logado em memória
       _currentUser = user;
 
       return user;
@@ -49,6 +49,29 @@ class LoginServiceImpl implements LoginService {
         stackTrace: s,
       );
       throw AppException('Erro ao tentar realizar o login. Tente novamente.');
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      log('Iniciando logout do usuário atual...', name: 'LoginServiceImpl');
+
+      // Limpa o usuário logado da memória
+      _currentUser = null;
+
+      // Futuramente, se quiser apagar dados locais:
+      // await _repository.clearSession();
+
+      log('Logout concluído com sucesso', name: 'LoginServiceImpl');
+    } catch (e, s) {
+      log(
+        'Erro ao tentar realizar logout: $e',
+        name: 'LoginServiceImpl',
+        error: e,
+        stackTrace: s,
+      );
+      throw AppException('Erro ao tentar sair da conta. Tente novamente.');
     }
   }
 }
