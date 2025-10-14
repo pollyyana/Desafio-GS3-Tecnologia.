@@ -15,7 +15,7 @@ Este projeto foi desenvolvido em **Flutter**, simula um sistema de gerenciamento
 Ao selecionar um cartão na tela principal (**Home**), as listas de **faturas** e **lançamentos** são dinamicamente atualizadas, oferecendo uma visão financeira coesa e em tempo real para o usuário.
 
 ---
-## ✨ Funcionalidades Adicionais
+## Funcionalidades Adicionais
 
 O projeto inclui funcionalidades de UX e gerenciamento essenciais, como:
 
@@ -39,9 +39,9 @@ Para que as faturas e lançamentos sejam atualizados na Home, é necessário **c
 - **JSON Server** — Simulação de backend REST.
 - **Validatorless** — Validações simples de formulários.
 
-### 💻 Como Iniciar o Backend (JSON Server)
+### Como Iniciar o Backend (Json Rest Server)
 
-A branch `master` utiliza o **JSON Server** para simular um backend REST.
+A branch `master` utiliza o package **Json Rest Server** para simular um backend REST.
 
 1.  **Acesse a pasta:**
     ```bash
@@ -94,4 +94,4 @@ A branch `provider` representa uma evolução significativa, focando em:
 | Branch | Objetivo | Gerenciamento de Estado | Backend/Persistência | Observação Principal |
 | :--- | :--- | :--- | :--- | :--- |
 | `master` | Primeira versão e prova de conceito | GetX | JSON Server (Simulado) | Requer **clique** para atualização de faturas. |
-| `provider` | Versão atual, otimizada e principal | Provider | SQLite (Local) | Atualização de faturas **automática** (Scroll). |
+| `provider` | Versão atual, otimizada e principal | Provider | SQLite (Local) | Atualização de faturas **automática** ao realizar o scroll. |
